@@ -1,0 +1,135 @@
+\
+
+* Doorsly = property management system
+* Dora = the assistant you interact with in the demo
+
+Here’s a cleaner version aligned with that.
+
+---
+
+## Hero
+
+**Try Doorsly in 60 Seconds — Just Text**
+
+Doorsly is a new property management system for small landlords.
+
+Text the number below to try a live demo with **Dora, the built-in assistant.**
+
+**Text "DEMO" to (XXX) XXX-XXXX**
+
+No signup required.
+Instant demo account.
+
+---
+
+## What Happens When You Text
+
+When you send a message:
+
+* A demo account is created automatically
+* Sample properties appear instantly
+* You can start managing rentals right away
+
+You'll be talking to **Dora**, the assistant inside Doorsly.
+
+Try things like:
+
+* "Show me overdue rent"
+* "Create a plumbing work order"
+* "Add an expense for $85"
+* "List my properties"
+
+This is a real system — not a scripted chatbot.
+
+---
+
+## What Doorsly Is
+
+Doorsly is property management software designed for landlords with small and medium portfolios.
+
+It keeps everything in one place:
+
+* Properties and tenants
+* Rent tracking
+* Maintenance
+* Messages
+* Expenses
+* Documents
+
+Dora helps you do the work faster.
+
+This is an early version and we're actively improving it.
+
+---
+
+## Why Doorsly Exists
+
+Most landlords manage properties across:
+
+* Spreadsheets
+* Emails
+* Text messages
+* Notes
+* Bank statements
+
+Doorsly brings it together into one system.
+
+Dora makes it faster to use.
+
+---
+
+## Early Access Section
+
+### This Is an Early Preview
+
+Doorsly is still being built.
+
+Some features are incomplete and you may run into rough edges.
+
+We're looking to collaborate with landlords who want to help shape the product.
+
+---
+
+## Who Should Try This
+
+Good fit:
+
+* Landlords with a few to a few dozen units
+* Self-managing owners
+* Spreadsheet users
+* People testing new tools
+
+Probably not for you yet if you need:
+
+* Tenant portals
+* Online rent payments
+* Full accounting integrations
+
+---
+
+## CTA
+
+**Text "DEMO" to (XXX) XXX-XXXX**
+
+Try Doorsly in under a minute.
+
+---
+
+## Why this framing works
+
+It positions correctly:
+
+* **Doorsly = serious software**
+* **Dora = the interface**
+
+Which feels:
+
+* More credible
+* Less gimmicky
+* More future-proof
+
+Also important psychologically:
+
+People adopt **software**, not **AI agents**.
+
+The agent is the accelerator — not the product.
