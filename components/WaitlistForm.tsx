@@ -1,0 +1,117 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+export function WaitlistForm() {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError(null);
+
+    const trimmedEmail = email.trim();
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
+    if (!isValidEmail) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: trimmedEmail }),
+      });
+
+      if (!response.ok) {
+        setError("Sorry, we couldn't join you right now. Please try again.");
+        return;
+      }
+
+      setIsSubmitted(true);
+      setEmail("");
+    } catch {
+      setError("Sorry, we couldn't join you right now. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="mx-auto w-full max-w-md">
+      <AnimatePresence mode="wait">
+        {isSubmitted ? (
+          <motion.div
+            key="success"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="flex flex-col items-center justify-center space-y-3 rounded-2xl border border-primary/10 bg-primary/5 p-6 text-center"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+              <CheckCircle2 className="h-6 w-6 text-primary" />
+            </div>
+            <h3
+              className="text-lg font-semibold text-foreground"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              You&apos;re on the list
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              We&apos;ll send you an update as soon as we&apos;re ready for you.
+            </p>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="form"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <form onSubmit={onSubmit} className="space-y-3">
+              <div className="relative flex items-center">
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="Enter your email address"
+                  className="h-14 rounded-full border-muted-foreground/20 bg-white/50 pl-5 pr-32 shadow-sm backdrop-blur-sm focus-visible:ring-primary"
+                  aria-invalid={Boolean(error)}
+                  required
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  disabled={isSubmitting}
+                  className="absolute right-1.5 h-11 rounded-full bg-primary px-6 font-medium text-primary-foreground transition-all hover:bg-primary/90"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      Join Waitlist
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+              {error ? <p className="ml-4 text-sm text-red-500">{error}</p> : null}
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
