@@ -3,7 +3,9 @@
 import { motion } from "framer-motion";
 import { Battery, Signal, Wifi } from "lucide-react";
 
-export function PhoneMockup() {
+import type { Dictionary } from "@/lib/i18n/types";
+
+export function PhoneMockup({ dict }: { dict: Dictionary["mockup"] }) {
   return (
     <div className="relative mx-auto aspect-[1/2] w-full max-w-[320px] perspective-[1000px]">
       <motion.div
@@ -37,7 +39,7 @@ export function PhoneMockup() {
               transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
               className="max-w-[80%] self-end rounded-2xl rounded-tr-sm bg-blue-500 px-4 py-2.5 text-white shadow-sm"
             >
-              <p className="text-[15px]">Hi</p>
+              <p className="text-[15px]">{dict.userMessage}</p>
             </motion.div>
 
             <motion.div
@@ -66,17 +68,14 @@ export function PhoneMockup() {
               transition={{ delay: 2.5 }}
               className="max-w-[85%] self-start rounded-2xl rounded-tl-sm border border-slate-100 bg-white px-4 py-3 text-slate-800 shadow-sm"
             >
-              <p className="text-[14px] leading-relaxed">
-                Hi, I&apos;m Dora - your property management AI assistant. I can
-                help you track properties, units, tenants, leases, rent and
-                ledger balances, work orders, expenses, vendors,
-                announcements, and daily to-dos in one conversation.
-              </p>
+              <p className="text-[14px] leading-relaxed">{dict.doraMessage}</p>
             </motion.div>
           </div>
 
           <div className="mt-auto flex h-12 items-center rounded-full border border-slate-200 bg-white px-4">
-            <span className="text-sm text-slate-400">Text message</span>
+            <span className="text-sm text-slate-400">
+              {dict.inputPlaceholder}
+            </span>
           </div>
         </div>
       </motion.div>

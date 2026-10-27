@@ -80,3 +80,12 @@
 .glass {
   @apply border border-white/20 bg-white/70 shadow-sm backdrop-blur-md;
 }
+
+/* Waitlist section texture: faint door-grid lines and soft highlights, no external image. */
+.bg-doors-pattern {
+  background-image: radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.14), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(255, 255, 255, 0.1), transparent 40%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: auto, auto, 56px 56px, 56px 56px;
+}

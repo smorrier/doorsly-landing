@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
   Building2,
   CheckCircle2,
   FileSpreadsheet,
@@ -13,14 +12,27 @@ import {
   Zap,
 } from "lucide-react";
 
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { PhoneMockup } from "@/components/PhoneMockup";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { Button } from "@/components/ui/button";
+import { otherLang, type Lang } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/types";
+import { DEMO_SMS_NUMBER, PATHS, formatDemoNumber, smsHref } from "@/lib/site";
 
-const DEMO_PHONE = "(438) 533-3509";
-const DEMO_PHONE_SMS_LINK = "sms:+14385333509";
+const FEATURE_ICONS = [Zap, LayoutDashboard, MessageSquareText];
 
-export function LandingPage() {
+type LandingPageProps = {
+  lang: Lang;
+  dict: Dictionary;
+};
+
+export function LandingPage({ lang, dict }: LandingPageProps) {
+  const demoPhone = formatDemoNumber(DEMO_SMS_NUMBER);
+  const demoSmsLink = smsHref(dict.sms.body);
+  const demoSmsAria = dict.sms.linkAria.replace("{phone}", demoPhone);
+  const otherLanguage = otherLang(lang);
+
   const scrollToWaitlist = () => {
     document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -29,7 +41,11 @@ export function LandingPage() {
     <div className="min-h-screen overflow-hidden bg-background selection:bg-primary/20">
       <header className="glass fixed inset-x-0 top-0 z-50">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center space-x-2">
+          <a
+            href={PATHS.home(lang)}
+            aria-label={dict.header.homeAria}
+            className="flex items-center space-x-2"
+          >
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <Building2 className="h-4 w-4 text-white" />
             </div>
@@ -39,14 +55,22 @@ export function LandingPage() {
             >
               Doorsly
             </span>
+          </a>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <LanguageSwitcher
+              href={PATHS.home(otherLanguage)}
+              targetLang={otherLanguage}
+              label={dict.language.switchTo}
+              ariaLabel={dict.language.switchAria}
+            />
+            <Button
+              variant="ghost"
+              className="rounded-full px-4 text-sm font-medium hover:bg-slate-100 sm:px-6"
+              onClick={scrollToWaitlist}
+            >
+              {dict.header.cta}
+            </Button>
           </div>
-          <Button
-            variant="ghost"
-            className="rounded-full px-6 text-sm font-medium hover:bg-slate-100"
-            onClick={scrollToWaitlist}
-          >
-            Early Access
-          </Button>
         </div>
       </header>
 
@@ -67,47 +91,46 @@ export function LandingPage() {
               >
                 <div className="mb-6 inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary">
                   <span className="mr-2 flex h-2 w-2 rounded-full bg-primary"></span>
-                  Now in Early Preview
+                  {dict.hero.badge}
                 </div>
 
                 <h1 className="mb-6 text-5xl font-bold leading-[1.1] tracking-tight text-foreground lg:text-7xl">
-                  Try Doorsly in 60 Seconds{" "}
+                  {dict.hero.titleLead}{" "}
                   <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
-                    - Just Text.
+                    {dict.hero.titleAccent}
                   </span>
                 </h1>
 
                 <p className="mb-8 max-w-lg text-xl leading-relaxed text-muted-foreground">
-                  A new breed of property management software designed
-                  specifically for small and medium landlords.
+                  {dict.hero.subtitle}
                 </p>
 
                 <div className="relative max-w-md overflow-hidden rounded-2xl border bg-white p-6 shadow-sm lg:p-8">
                   <div className="absolute left-0 top-0 h-full w-1 bg-primary"></div>
                   <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-primary">
-                    Instant Demo Account
+                    {dict.hero.demoEyebrow}
                   </p>
                   <p className="mb-4 text-2xl font-bold text-foreground">
-                    Say hi to Dora at
+                    {dict.hero.demoPrompt}
                   </p>
                   <div className="mb-4 font-mono text-4xl font-black tracking-tighter text-slate-800 lg:text-5xl">
                     <a
-                      href={DEMO_PHONE_SMS_LINK}
-                      aria-label={`Text ${DEMO_PHONE}`}
+                      href={demoSmsLink}
+                      aria-label={demoSmsAria}
                       className="transition-colors hover:text-primary"
                     >
-                      {DEMO_PHONE}
+                      {demoPhone}
                     </a>
                   </div>
                   <p className="flex items-center text-sm text-muted-foreground">
                     <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
-                    No signup or credit card required.
+                    {dict.hero.noSignup}
                   </p>
                 </div>
               </motion.div>
 
               <div className="relative flex items-center justify-center lg:h-[600px] lg:justify-end">
-                <PhoneMockup />
+                <PhoneMockup dict={dict.mockup} />
               </div>
             </div>
           </div>
@@ -116,50 +139,32 @@ export function LandingPage() {
         <section className="relative border-y border-slate-100 bg-slate-50 py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto mb-16 max-w-3xl text-center">
-              <h2 className="mb-4 text-3xl font-bold">What Happens When You Text?</h2>
-              <p className="text-lg text-muted-foreground">
-                Experience the platform immediately without jumping through hoops.
-              </p>
+              <h2 className="mb-4 text-3xl font-bold">{dict.how.title}</h2>
+              <p className="text-lg text-muted-foreground">{dict.how.subtitle}</p>
             </div>
 
             <div className="grid gap-8 md:grid-cols-3">
-              {[
-                {
-                  icon: Zap,
-                  title: "Instant Account",
-                  description:
-                    "We automatically create a secure demo environment tied to your phone number. Zero friction.",
-                },
-                {
-                  icon: LayoutDashboard,
-                  title: "Sample Portfolio",
-                  description:
-                    "Log in to find sample properties, tenants, and maintenance requests already populated.",
-                },
-                {
-                  icon: MessageSquareText,
-                  title: "Meet Dora",
-                  description:
-                    "Talk to Dora, the AI assistant built into Doorsly, via SMS to see how she handles requests.",
-                },
-              ].map((feature, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm transition-shadow hover:shadow-md"
-                >
-                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                    <feature.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="mb-3 text-xl font-semibold">{feature.title}</h3>
-                  <p className="leading-relaxed text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </motion.div>
-              ))}
+              {dict.how.features.map((feature, i) => {
+                const Icon = FEATURE_ICONS[i];
+                return (
+                  <motion.div
+                    key={feature.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                    className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm transition-shadow hover:shadow-md"
+                  >
+                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+                      <Icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="mb-3 text-xl font-semibold">{feature.title}</h3>
+                    <p className="leading-relaxed text-muted-foreground">
+                      {feature.description}
+                    </p>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -172,18 +177,17 @@ export function LandingPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <h2 className="mb-6 text-3xl font-bold lg:text-4xl">What Doorsly Is</h2>
-                <p className="mb-6 text-lg leading-relaxed text-muted-foreground">
-                  Doorsly is serious property management software. It provides a
-                  central source of truth for your entire portfolio-leases,
-                  maintenance, communications, and finances.
-                </p>
-                <p className="text-lg leading-relaxed text-muted-foreground">
-                  Dora is the accelerator. She&apos;s the interface that makes
-                  interacting with your data as easy as sending a text message,
-                  bridging the gap between powerful software and everyday
-                  convenience.
-                </p>
+                <h2 className="mb-6 text-3xl font-bold lg:text-4xl">
+                  {dict.about.title}
+                </h2>
+                {dict.about.paragraphs.map((paragraph, i) => (
+                  <p
+                    key={i}
+                    className="mb-6 text-lg leading-relaxed text-muted-foreground last:mb-0"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
               </motion.div>
 
               <motion.div
@@ -196,16 +200,11 @@ export function LandingPage() {
                   <FileSpreadsheet className="h-32 w-32" />
                 </div>
                 <h3 className="relative z-10 mb-6 text-2xl font-bold">
-                  Why It Exists
+                  {dict.about.whyTitle}
                 </h3>
                 <ul className="relative z-10 space-y-6">
-                  {[
-                    "Stop losing track of maintenance requests in text threads.",
-                    "Replace fragmented Excel spreadsheets with a unified system.",
-                    "Keep tenant communication professional and recorded.",
-                    "Spend less time on admin, more time growing your portfolio.",
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start">
+                  {dict.about.whyItems.map((item) => (
+                    <li key={item} className="flex items-start">
                       <CheckCircle2 className="mr-4 h-6 w-6 shrink-0 text-blue-400" />
                       <span className="leading-relaxed text-slate-300">{item}</span>
                     </li>
@@ -219,46 +218,38 @@ export function LandingPage() {
         <section className="border-t border-slate-100 bg-slate-50 py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-16 text-center">
-              <h2 className="mb-4 text-3xl font-bold">Who Should Try This?</h2>
-              <p className="text-lg text-muted-foreground">
-                We&apos;re building for a specific type of landlord.
-              </p>
+              <h2 className="mb-4 text-3xl font-bold">{dict.fit.title}</h2>
+              <p className="text-lg text-muted-foreground">{dict.fit.subtitle}</p>
             </div>
 
             <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
               <div className="relative overflow-hidden rounded-3xl border border-green-100 bg-white p-8 shadow-sm">
                 <div className="absolute inset-x-0 top-0 h-1 bg-green-500" />
                 <h3 className="mb-6 flex items-center text-xl font-bold">
-                  <CheckCircle2 className="mr-2 h-5 w-5 text-green-500" />A Great
-                  Fit If...
+                  <CheckCircle2 className="mr-2 h-5 w-5 shrink-0 text-green-500" />
+                  {dict.fit.goodTitle}
                 </h3>
                 <ul className="space-y-4">
-                  <li className="text-muted-foreground">You manage 5 to 50 doors.</li>
-                  <li className="text-muted-foreground">
-                    You currently use spreadsheets, emails, and personal texts.
-                  </li>
-                  <li className="text-muted-foreground">
-                    You want a modern, simple interface without enterprise bloat.
-                  </li>
+                  {dict.fit.goodItems.map((item) => (
+                    <li key={item} className="text-muted-foreground">
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
 
               <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
                 <div className="absolute inset-x-0 top-0 h-1 bg-slate-300" />
                 <h3 className="mb-6 flex items-center text-xl font-bold">
-                  <XCircle className="mr-2 h-5 w-5 text-slate-400" />
-                  Not For You Yet If...
+                  <XCircle className="mr-2 h-5 w-5 shrink-0 text-slate-400" />
+                  {dict.fit.badTitle}
                 </h3>
                 <ul className="space-y-4">
-                  <li className="text-muted-foreground">
-                    You manage 500+ commercial units.
-                  </li>
-                  <li className="text-muted-foreground">
-                    You require complex multi-tiered accounting software.
-                  </li>
-                  <li className="text-muted-foreground">
-                    You have a large staff with complex permissions needs.
-                  </li>
+                  {dict.fit.badItems.map((item) => (
+                    <li key={item} className="text-muted-foreground">
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -267,20 +258,16 @@ export function LandingPage() {
 
         <section id="waitlist" className="relative overflow-hidden py-24">
           <div className="absolute inset-0 -z-20 bg-primary" />
-          <div className="absolute inset-0 -z-10 bg-[url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=80')] bg-cover bg-center opacity-10 mix-blend-overlay" />
+          <div className="bg-doors-pattern absolute inset-0 -z-10" />
 
-          <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl px-4 text-center text-primary-foreground sm:px-6 lg:px-8">
             <h2 className="mb-4 text-3xl font-bold lg:text-4xl">
-              This Is an Early Preview
+              {dict.waitlist.title}
             </h2>
-            <p className="mx-auto mb-10 max-w-2xl text-lg">
-              Doorsly is currently in active development. If you don&apos;t want to
-              try the demo today but want to be notified when we officially
-              launch, join the waitlist.
-            </p>
+            <p className="mx-auto mb-10 max-w-2xl text-lg">{dict.waitlist.body}</p>
 
             <div className="rounded-3xl border border-white/20 bg-white/10 p-8 backdrop-blur-md">
-              <WaitlistForm />
+              <WaitlistForm lang={lang} dict={dict.waitlist} />
             </div>
           </div>
         </section>
@@ -300,25 +287,25 @@ export function LandingPage() {
 
           <div className="mb-8 inline-flex flex-col items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 p-4 sm:flex-row">
             <span className="mb-2 mr-0 text-sm font-medium text-slate-600 sm:mb-0 sm:mr-4">
-              Ready to try it right now?
+              {dict.footer.readyLabel}
             </span>
             <div className="flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
-              <Smartphone className="mr-2 h-4 w-4 text-primary" />
+              <Smartphone className="mr-2 h-4 w-4 shrink-0 text-primary" />
               <span className="font-mono font-bold text-slate-800">
-                Text anything (try "Hi Dora") to{" "}
+                {dict.footer.textPrompt}{" "}
                 <a
-                  href={DEMO_PHONE_SMS_LINK}
-                  aria-label={`Text ${DEMO_PHONE}`}
-                  className="transition-colors hover:text-primary"
+                  href={demoSmsLink}
+                  aria-label={demoSmsAria}
+                  className="whitespace-nowrap transition-colors hover:text-primary"
                 >
-                  {DEMO_PHONE}
+                  {demoPhone}
                 </a>
               </span>
             </div>
           </div>
 
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Doorsly. All rights reserved.
+            &copy; {new Date().getFullYear()} Doorsly. {dict.footer.rights}
           </p>
         </div>
       </footer>

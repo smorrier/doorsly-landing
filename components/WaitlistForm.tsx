@@ -6,8 +6,15 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import type { Lang } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/types";
 
-export function WaitlistForm() {
+type WaitlistFormProps = {
+  lang: Lang;
+  dict: Dictionary["waitlist"];
+};
+
+export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
@@ -20,7 +27,7 @@ export function WaitlistForm() {
     const trimmedEmail = email.trim();
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
     if (!isValidEmail) {
-      setError("Please enter a valid email address.");
+      setError(dict.errorInvalidEmail);
       return;
     }
 
@@ -32,18 +39,20 @@ export function WaitlistForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: trimmedEmail }),
+        body: JSON.stringify({ email: trimmedEmail, language: lang }),
       });
 
       if (!response.ok) {
-        setError("Sorry, we couldn't join you right now. Please try again.");
+        setError(
+          response.status === 429 ? dict.errorRateLimited : dict.errorGeneric,
+        );
         return;
       }
 
       setIsSubmitted(true);
       setEmail("");
     } catch {
-      setError("Sorry, we couldn't join you right now. Please try again.");
+      setError(dict.errorGeneric);
     } finally {
       setIsSubmitting(false);
     }
@@ -58,7 +67,7 @@ export function WaitlistForm() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="flex flex-col items-center justify-center space-y-3 rounded-2xl border border-primary/10 bg-primary/5 p-6 text-center"
+            className="flex flex-col items-center justify-center space-y-3 rounded-2xl border border-primary/10 bg-white p-6 text-center text-foreground"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <CheckCircle2 className="h-6 w-6 text-primary" />
@@ -67,10 +76,10 @@ export function WaitlistForm() {
               className="text-lg font-semibold text-foreground"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              You&apos;re on the list
+              {dict.successTitle}
             </h3>
             <p className="text-sm text-muted-foreground">
-              We&apos;ll send you an update as soon as we&apos;re ready for you.
+              {dict.successBody}
             </p>
           </motion.div>
         ) : (
@@ -86,7 +95,9 @@ export function WaitlistForm() {
                   type="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  placeholder="Enter your email address"
+                  placeholder={dict.emailPlaceholder}
+                  aria-label={dict.emailLabel}
+                  autoComplete="email"
                   className="h-14 rounded-full border-muted-foreground/20 bg-white/50 pl-5 pr-32 shadow-sm backdrop-blur-sm focus-visible:ring-primary"
                   aria-invalid={Boolean(error)}
                   required
@@ -101,7 +112,7 @@ export function WaitlistForm() {
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <>
-                      Join Waitlist
+                      {dict.submit}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </>
                   )}
