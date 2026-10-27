@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 
+import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { LANGS, isLang } from "@/lib/i18n/config";
-import { SITE_URL } from "@/lib/site";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { PATHS, SITE_URL } from "@/lib/site";
 import "../globals.css";
 
 const inter = Inter({
@@ -34,6 +36,7 @@ export default function RootLayout({
   params: { lang: string };
 }>) {
   if (!isLang(params.lang)) notFound();
+  const dict = getDictionary(params.lang);
 
   return (
     <html
@@ -41,7 +44,14 @@ export default function RootLayout({
       className={`${inter.variable} ${plusJakartaSans.variable}`}
       suppressHydrationWarning
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <ConsentBanner
+          dict={dict.consent}
+          privacyHref={PATHS.privacy(params.lang)}
+          privacyLabel={dict.footer.privacyLabel}
+        />
+      </body>
     </html>
   );
 }

@@ -1,5 +1,7 @@
 import type { Dictionary } from "@/lib/i18n/types";
 
+import { privacyFr } from "./privacy.fr";
+
 /** Québec French, vouvoiement. Colons take a non-breaking space; ? and ! do not (Québec usage). */
 export const fr: Dictionary = {
   meta: {
@@ -119,4 +121,36 @@ export const fr: Dictionary = {
     legalNavAria: "Mentions légales",
     privacyLabel: "Politique de confidentialité",
   },
+  consent: {
+    bannerTitle: "Vos choix de confidentialité",
+    bannerBody:
+      "Nous aimerions utiliser des témoins de mesure d’audience et de publicité (Google et Meta) pour évaluer la performance de cette page et de nos publicités. Ils restent désactivés si vous ne les acceptez pas.",
+    customize: "Personnaliser",
+    rejectAll: "Tout refuser",
+    acceptAll: "Tout accepter",
+    dialogTitle: "Préférences des témoins",
+    dialogDescription:
+      "Choisissez les témoins que Doorsly peut utiliser. Vous pouvez modifier ce choix en tout temps depuis le bas de la page.",
+    save: "Enregistrer mes choix",
+    alwaysOn: "Toujours actif",
+    close: "Fermer",
+    preferencesLink: "Préférences des témoins",
+    categories: {
+      necessary: {
+        title: "Nécessaires",
+        description: "Mémorise vos choix sur les témoins. Rien d’autre.",
+      },
+      analytics: {
+        title: "Mesure d’audience",
+        description:
+          "Google Analytics mesure les visites, les inscriptions à la liste d’attente et les touchers du lien du texto.",
+      },
+      advertising: {
+        title: "Publicité",
+        description:
+          "Meta et Google Ads mesurent la performance de nos publicités et relient les inscriptions à la publicité qui les a suscitées.",
+      },
+    },
+  },
+  privacy: privacyFr,
 };

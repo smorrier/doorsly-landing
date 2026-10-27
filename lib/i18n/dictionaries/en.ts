@@ -1,5 +1,7 @@
 import type { Dictionary } from "@/lib/i18n/types";
 
+import { privacyEn } from "./privacy.en";
+
 export const en: Dictionary = {
   meta: {
     title: "Doorsly | Property management software for landlords with 5–50 doors",
@@ -114,4 +116,36 @@ export const en: Dictionary = {
     legalNavAria: "Legal",
     privacyLabel: "Privacy policy",
   },
+  consent: {
+    bannerTitle: "Your privacy choices",
+    bannerBody:
+      "We’d like to use analytics and advertising cookies (Google and Meta) to measure how this page and our ads perform. They stay off unless you accept.",
+    customize: "Customize",
+    rejectAll: "Reject all",
+    acceptAll: "Accept all",
+    dialogTitle: "Cookie preferences",
+    dialogDescription:
+      "Choose which cookies Doorsly may use. You can change this at any time from the footer.",
+    save: "Save choices",
+    alwaysOn: "Always on",
+    close: "Close",
+    preferencesLink: "Cookie preferences",
+    categories: {
+      necessary: {
+        title: "Necessary",
+        description: "Remembers your cookie choices. Nothing else.",
+      },
+      analytics: {
+        title: "Analytics",
+        description:
+          "Google Analytics measures visits, waitlist signups and taps on the text-message link.",
+      },
+      advertising: {
+        title: "Advertising",
+        description:
+          "Meta and Google Ads measure how our ads perform and match signups to the ad that led to them.",
+      },
+    },
+  },
+  privacy: privacyEn,
 };

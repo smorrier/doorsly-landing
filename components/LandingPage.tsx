@@ -12,6 +12,7 @@ import {
   Zap,
 } from "lucide-react";
 
+import { ConsentPreferencesLink } from "@/components/consent/ConsentPreferencesLink";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { PhoneMockup } from "@/components/PhoneMockup";
 import { WaitlistForm } from "@/components/WaitlistForm";
@@ -303,6 +304,19 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
               </span>
             </div>
           </div>
+
+          <nav
+            aria-label={dict.footer.legalNavAria}
+            className="mb-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
+          >
+            <a
+              href={PATHS.privacy(lang)}
+              className="underline underline-offset-4 hover:no-underline"
+            >
+              {dict.footer.privacyLabel}
+            </a>
+            <ConsentPreferencesLink label={dict.consent.preferencesLink} />
+          </nav>
 
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} Doorsly. {dict.footer.rights}

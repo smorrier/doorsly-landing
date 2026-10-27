@@ -8,6 +8,27 @@ type Feature = { title: string; description: string };
  * Every visible string, one object per language. Plain data only: it is passed from server
  * components to client components, so no functions. `{phone}` style tokens are replaced at render.
  */
+/** A paragraph (string) or a bullet list (string[]). Tokens: {officerName}, {officerEmail}, {cookiePrefs}. */
+export type PolicyBlock = string | string[];
+export type PolicySection = {
+  id: string;
+  title: string;
+  blocks: PolicyBlock[];
+  table?: { head: string[]; rows: string[][] };
+};
+export type PrivacyDoc = {
+  metaTitle: string;
+  metaDescription: string;
+  title: string;
+  updatedLabel: string;
+  /** Human-readable date of the last change to the policy. */
+  updated: string;
+  backLabel: string;
+  sections: PolicySection[];
+};
+
+type ConsentCategoryCopy = { title: string; description: string };
+
 export type Dictionary = {
   meta: {
     title: string;
@@ -73,4 +94,24 @@ export type Dictionary = {
     legalNavAria: string;
     privacyLabel: string;
   };
+  consent: {
+    bannerTitle: string;
+    bannerBody: string;
+    customize: string;
+    rejectAll: string;
+    acceptAll: string;
+    dialogTitle: string;
+    dialogDescription: string;
+    save: string;
+    alwaysOn: string;
+    close: string;
+    /** Footer link that reopens the preferences dialog. */
+    preferencesLink: string;
+    categories: {
+      necessary: ConsentCategoryCopy;
+      analytics: ConsentCategoryCopy;
+      advertising: ConsentCategoryCopy;
+    };
+  };
+  privacy: PrivacyDoc;
 };

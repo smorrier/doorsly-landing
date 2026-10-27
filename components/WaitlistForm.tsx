@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { Lang } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/types";
+import { PATHS } from "@/lib/site";
 
 type WaitlistFormProps = {
   lang: Lang;
@@ -118,7 +119,16 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
                   )}
                 </Button>
               </div>
-              {error ? <p className="ml-4 text-sm text-red-500">{error}</p> : null}
+              {error ? <p className="ml-4 text-sm text-red-200">{error}</p> : null}
+              <p className="px-4 text-xs text-primary-foreground/80">
+                {dict.privacyNote}{" "}
+                <a
+                  href={PATHS.privacy(lang)}
+                  className="underline underline-offset-4 hover:no-underline"
+                >
+                  {dict.privacyLinkLabel}
+                </a>
+              </p>
             </form>
           </motion.div>
         )}
