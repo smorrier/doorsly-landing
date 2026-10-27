@@ -42,8 +42,8 @@ least one of `LOOPS_API_KEY` and `SLACK_WEBHOOK_URL`.
 
 ## Before the ads go live
 
-- Replace `TODO_PRIVACY_OFFICER_NAME` and `TODO_PRIVACY_EMAIL` in `lib/site.ts` (the person in
-  charge of personal information; the policy shows both).
+- The person in charge of personal information shown in the policy is set in `lib/site.ts`
+  (`PRIVACY_OFFICER`); change it there if it moves.
 - Read the policy's retention periods (`privacy.{fr,en}.ts`, section "How long we keep it") and
   make them true: waitlist data deleted within 24 months; Google Analytics data retention set to
   14 months (GA4 > Admin > Data collection and modification > Data retention).

@@ -16,10 +16,10 @@ export function smsHref(body: string): string {
   return `sms:${DEMO_SMS_NUMBER}?&body=${encodeURIComponent(body)}`;
 }
 
-/** Person in charge of personal information (Québec Law 25). Fill in before the ads go live. */
+/** Person in charge of personal information (Québec Law 25), shown in the privacy policy. */
 export const PRIVACY_OFFICER = {
-  name: "TODO_PRIVACY_OFFICER_NAME",
-  email: "TODO_PRIVACY_EMAIL",
+  name: "Sean Morrier",
+  email: "sean@propstack.ca",
 } as const;
 
 /** Language-specific page paths (the privacy page has a different slug per language). */
