@@ -4,7 +4,7 @@ export const en: Dictionary = {
   meta: {
     title: "Doorsly | Property management software for landlords with 5–50 doors",
     description:
-      "Keep leases, rent, maintenance and tenant messages in one place. Text Dora, the AI assistant, to get a demo account in 60 seconds. No signup or credit card required.",
+      "Leases, rent, maintenance and tenant messages in one place. Text Dora, the AI assistant, to get a demo account in 60 seconds. No signup needed.",
     ogLocale: "en_CA",
     ogImageAlt: "Doorsly: try the property management demo in 60 seconds by text",
   },

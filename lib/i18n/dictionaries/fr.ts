@@ -5,7 +5,7 @@ export const fr: Dictionary = {
   meta: {
     title: "Doorsly | Gestion immobilière pour propriétaires de 5 à 50 logements",
     description:
-      "Baux, loyers, entretien et messages de vos locataires au même endroit. Envoyez un texto à Dora, l’assistante IA, et obtenez un compte de démonstration en 60 secondes. Aucune inscription ni carte de crédit.",
+      "Baux, loyers, entretien et messages des locataires au même endroit. Un texto à Dora, l’assistante IA, et votre compte de démo est prêt en 60 secondes.",
     ogLocale: "fr_CA",
     ogImageAlt:
       "Doorsly : essayez la démo de gestion immobilière en 60 secondes par texto",
