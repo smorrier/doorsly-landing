@@ -6,9 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { trackLead } from "@/lib/analytics/events";
+import { newMetaEventId } from "@/lib/analytics/meta";
 import type { Lang } from "@/lib/i18n/config";
-import type { Dictionary } from "@/lib/i18n/types";
+import { DOORS_VALUES, type Dictionary } from "@/lib/i18n/types";
 import { PATHS } from "@/lib/site";
+import { attributionFromSearch, EMAIL_PATTERN, isDoorsValue } from "@/lib/waitlist";
 
 type WaitlistFormProps = {
   lang: Lang;
@@ -19,6 +22,7 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
+  const [doors, setDoors] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -26,13 +30,21 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
     setError(null);
 
     const trimmedEmail = email.trim();
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
-    if (!isValidEmail) {
+    if (!EMAIL_PATTERN.test(trimmedEmail)) {
       setError(dict.errorInvalidEmail);
       return;
     }
 
+    // Honeypot: a filled hidden field means a bot. Look like a success, send and track nothing.
+    const honeypot = new FormData(event.currentTarget).get("website");
+    if (typeof honeypot === "string" && honeypot.trim()) {
+      setIsSubmitted(true);
+      return;
+    }
+
     setIsSubmitting(true);
+    // Shared with the server so Meta counts the Pixel Lead and the Conversions API Lead once.
+    const eventId = newMetaEventId();
 
     try {
       const response = await fetch("/api/waitlist", {
@@ -40,7 +52,15 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: trimmedEmail, language: lang }),
+        body: JSON.stringify({
+          email: trimmedEmail,
+          language: lang,
+          doors: isDoorsValue(doors) ? doors : undefined,
+          // Read from the address bar now, so no attribution cookie is needed.
+          ...attributionFromSearch(window.location.search),
+          eventId,
+          pageUrl: window.location.href.split("#")[0],
+        }),
       });
 
       if (!response.ok) {
@@ -52,6 +72,8 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
 
       setIsSubmitted(true);
       setEmail("");
+      setDoors("");
+      trackLead(eventId, lang);
     } catch {
       setError(dict.errorGeneric);
     } finally {
@@ -99,7 +121,7 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
                   placeholder={dict.emailPlaceholder}
                   aria-label={dict.emailLabel}
                   autoComplete="email"
-                  className="h-14 rounded-full border-muted-foreground/20 bg-white/50 pl-5 pr-32 shadow-sm backdrop-blur-sm focus-visible:ring-primary"
+                  className="h-14 rounded-full border-muted-foreground/20 bg-white/50 pl-5 pr-44 shadow-sm backdrop-blur-sm focus-visible:ring-primary"
                   aria-invalid={Boolean(error)}
                   required
                 />
@@ -118,6 +140,25 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
                     </>
                   )}
                 </Button>
+              </div>
+              <select
+                value={doors}
+                onChange={(event) => setDoors(event.target.value)}
+                aria-label={dict.doorsLabel}
+                className={`h-12 w-full rounded-full border border-muted-foreground/20 bg-white/50 px-5 text-base shadow-sm backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-sm ${
+                  doors ? "text-foreground" : "text-muted-foreground"
+                }`}
+              >
+                <option value="">{dict.doorsPlaceholder}</option>
+                {DOORS_VALUES.map((value) => (
+                  <option key={value} value={value} className="text-foreground">
+                    {dict.doorsOptions[value]}
+                  </option>
+                ))}
+              </select>
+              {/* Honeypot: hidden from people and assistive tech, tempting to bots. */}
+              <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" />
               </div>
               {error ? <p className="ml-4 text-sm text-red-200">{error}</p> : null}
               <p className="px-4 text-xs text-primary-foreground/80">

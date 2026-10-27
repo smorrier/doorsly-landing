@@ -96,7 +96,7 @@ export const fr: Dictionary = {
       "21-50": "21 à 50 logements",
       "50+": "Plus de 50 logements",
     },
-    submit: "Rejoindre la liste",
+    submit: "S’inscrire",
     privacyNote:
       "Nous utilisons votre courriel seulement pour vous annoncer le lancement de Doorsly.",
     privacyLinkLabel: "Politique de confidentialité",
