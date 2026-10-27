@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { ConsentPreferencesLink } from "@/components/consent/ConsentPreferencesLink";
+import { DemoSmsLink } from "@/components/DemoSmsLink";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { PhoneMockup } from "@/components/PhoneMockup";
 import { WaitlistForm } from "@/components/WaitlistForm";
@@ -115,13 +116,15 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
                     {dict.hero.demoPrompt}
                   </p>
                   <div className="mb-4 font-mono text-4xl font-black tracking-tighter text-slate-800 lg:text-5xl">
-                    <a
+                    <DemoSmsLink
+                      lang={lang}
+                      location="hero"
                       href={demoSmsLink}
                       aria-label={demoSmsAria}
                       className="transition-colors hover:text-primary"
                     >
                       {demoPhone}
-                    </a>
+                    </DemoSmsLink>
                   </div>
                   <p className="flex items-center text-sm text-muted-foreground">
                     <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
@@ -294,13 +297,15 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
               <Smartphone className="mr-2 h-4 w-4 shrink-0 text-primary" />
               <span className="font-mono font-bold text-slate-800">
                 {dict.footer.textPrompt}{" "}
-                <a
+                <DemoSmsLink
+                  lang={lang}
+                  location="footer"
                   href={demoSmsLink}
                   aria-label={demoSmsAria}
                   className="whitespace-nowrap transition-colors hover:text-primary"
                 >
                   {demoPhone}
-                </a>
+                </DemoSmsLink>
               </span>
             </div>
           </div>
