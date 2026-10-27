@@ -16,10 +16,14 @@ export function smsHref(body: string): string {
   return `sms:${DEMO_SMS_NUMBER}?&body=${encodeURIComponent(body)}`;
 }
 
-/** Person in charge of personal information (Québec Law 25), shown in the privacy policy. */
+/**
+ * Person in charge of personal information (Québec Law 25), shown in the privacy policy. Set
+ * NEXT_PUBLIC_PRIVACY_OFFICER_NAME and NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL; a production build
+ * fails without them (next.config.mjs), so the placeholders only appear in local work.
+ */
 export const PRIVACY_OFFICER = {
-  name: "Sean Morrier",
-  email: "sean@propstack.ca",
+  name: process.env.NEXT_PUBLIC_PRIVACY_OFFICER_NAME || "TODO_PRIVACY_OFFICER_NAME",
+  email: process.env.NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL || "TODO_PRIVACY_EMAIL",
 } as const;
 
 /** Language-specific page paths (the privacy page has a different slug per language). */

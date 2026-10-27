@@ -35,6 +35,7 @@ See `.env.example`. `NEXT_PUBLIC_*` values are inlined at build time, so redeplo
 | `NEXT_PUBLIC_GOOGLE_ADS_ID` | Google Ads tag |
 | `LOOPS_API_KEY` | Creates or updates a Loops contact per signup (secret) |
 | `SLACK_WEBHOOK_URL` | Slack notification per signup (secret) |
+| `NEXT_PUBLIC_PRIVACY_OFFICER_NAME`, `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` | Person in charge of personal information, shown in the privacy policy. Required: `next build` fails without them |
 | `NEXT_PUBLIC_DEMO_SMS_NUMBER` | Number behind the "text Dora" link (defaults to +14385333509) |
 
 Every tracker variable is optional: with it unset, that tracker never loads. The waitlist needs at
@@ -42,8 +43,8 @@ least one of `LOOPS_API_KEY` and `SLACK_WEBHOOK_URL`.
 
 ## Before the ads go live
 
-- The person in charge of personal information shown in the policy is set in `lib/site.ts`
-  (`PRIVACY_OFFICER`); change it there if it moves.
+- Set `NEXT_PUBLIC_PRIVACY_OFFICER_NAME` and `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` (the person in
+  charge of personal information; the policy shows both). The build fails if either is missing.
 - Read the policy's retention periods (`privacy.{fr,en}.ts`, section "How long we keep it") and
   make them true: waitlist data deleted within 24 months; Google Analytics data retention set to
   14 months (GA4 > Admin > Data collection and modification > Data retention).
