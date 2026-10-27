@@ -32,13 +32,15 @@ See `.env.example`. `NEXT_PUBLIC_*` values are inlined at build time, so redeplo
 | `META_CAPI_ACCESS_TOKEN` | Server-side Lead to Meta (secret) |
 | `META_CAPI_TEST_EVENT_CODE` | Sends server events to Events Manager > Test events (remove after testing) |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | GA4 |
-| `NEXT_PUBLIC_GOOGLE_ADS_ID` | Google Ads tag |
+| `NEXT_PUBLIC_GOOGLE_ADS_ID` | Google Ads tag (optional; without it only GA4 runs) |
 | `LOOPS_API_KEY` | Creates or updates a Loops contact per signup (secret) |
 | `SLACK_WEBHOOK_URL` | Slack notification per signup (secret) |
 | `NEXT_PUBLIC_PRIVACY_OFFICER_NAME`, `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` | Person in charge of personal information, shown in the privacy policy. Required: `next build` fails without them |
 | `NEXT_PUBLIC_DEMO_SMS_NUMBER` | Number behind the "text Dora" link (defaults to +14385333509) |
 
-Every tracker variable is optional: with it unset, that tracker never loads. The waitlist needs at
+Every tracker variable is optional, each on its own: with one unset, that tracker never loads and
+the others are unaffected (for example GA4 without the Ads tag). A Google event is only sent when a
+configured tag's own category is granted: GA4 needs Analytics, the Ads tag needs Advertising. The waitlist needs at
 least one of `LOOPS_API_KEY` and `SLACK_WEBHOOK_URL`.
 
 ## Before the ads go live

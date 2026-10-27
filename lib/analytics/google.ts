@@ -1,6 +1,6 @@
 import { hasConsent } from "@/lib/consent/client";
 
-import { GOOGLE_TAG_IDS } from "./google-config";
+import { ADS_ID, GA_ID } from "./google-config";
 
 /**
  * GA4 and Google Ads through one gtag.js (components/analytics/GoogleTags.tsx). In GA4 mark
@@ -46,8 +46,13 @@ export function trackGoogleEvent(
   name: GoogleEventName,
   params: Record<string, unknown> = {},
 ): void {
-  if (typeof window === "undefined" || GOOGLE_TAG_IDS.length === 0) return;
-  if (!hasConsent("analytics") && !hasConsent("advertising")) return;
+  if (typeof window === "undefined") return;
+  // Some tag that is set up here must be allowed to receive it: GA4 needs Analytics, the Ads
+  // tag needs Advertising. Either ID may be unset. Otherwise the event would wait in the queue
+  // and be sent later, if the visitor consents to the other category.
+  const hasReceiver =
+    (!!GA_ID && hasConsent("analytics")) || (!!ADS_ID && hasConsent("advertising"));
+  if (!hasReceiver) return;
   if (window.gtag && configured.size > 0) window.gtag("event", name, params);
   else queue.push([name, params]);
 }
