@@ -219,7 +219,7 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
           </div>
         </section>
 
-        <section className="relative overflow-hidden py-20">
+        <section className="relative isolate overflow-hidden py-20">
           <div className="absolute inset-0 -z-20 bg-primary" />
           <div className="bg-doors-pattern absolute inset-0 -z-10" />
           <div className="mx-auto max-w-3xl px-4 text-center text-primary-foreground sm:px-6 lg:px-8">
