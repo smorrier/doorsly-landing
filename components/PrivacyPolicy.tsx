@@ -2,8 +2,7 @@ import { Fragment, type ReactNode } from "react";
 import { ArrowLeft, Building2 } from "lucide-react";
 
 import { ConsentPreferencesLink } from "@/components/consent/ConsentPreferencesLink";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { otherLang, type Lang } from "@/lib/i18n/config";
+import type { Lang } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/types";
 import { PATHS, PRIVACY_OFFICER } from "@/lib/site";
 
@@ -44,7 +43,6 @@ function renderText(text: string, dict: Dictionary): ReactNode {
 
 export function PrivacyPolicy({ lang, dict }: PrivacyPolicyProps) {
   const doc = dict.privacy;
-  const otherLanguage = otherLang(lang);
 
   return (
     <div className="min-h-screen bg-background">
@@ -65,12 +63,6 @@ export function PrivacyPolicy({ lang, dict }: PrivacyPolicyProps) {
               Doorsly
             </span>
           </a>
-          <LanguageSwitcher
-            href={PATHS.privacy(otherLanguage)}
-            targetLang={otherLanguage}
-            label={dict.language.switchTo}
-            ariaLabel={dict.language.switchAria}
-          />
         </div>
       </header>
 
@@ -86,7 +78,7 @@ export function PrivacyPolicy({ lang, dict }: PrivacyPolicyProps) {
         <h1 className="mb-2 text-4xl font-bold">{doc.title}</h1>
         <p className="mb-12 text-sm text-muted-foreground">
           {doc.updatedLabel}
-          {lang === "fr" ? " " : ""}: {doc.updated}
+          : {doc.updated}
         </p>
 
         <div className="space-y-10">

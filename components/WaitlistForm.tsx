@@ -16,9 +16,12 @@ import { attributionFromSearch, EMAIL_PATTERN, isDoorsValue } from "@/lib/waitli
 type WaitlistFormProps = {
   lang: Lang;
   dict: Dictionary["waitlist"];
+  /** "dark" for the blue section (white text), "light" for white or pale backgrounds. */
+  tone?: "dark" | "light";
 };
 
-export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
+export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
+  const light = tone === "light";
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
@@ -83,7 +86,7 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
 
   return (
     <div className="mx-auto w-full max-w-md">
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         {isSubmitted ? (
           <motion.div
             key="success"
@@ -121,7 +124,7 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
                   placeholder={dict.emailPlaceholder}
                   aria-label={dict.emailLabel}
                   autoComplete="email"
-                  className="h-14 rounded-full border-muted-foreground/20 bg-white/50 pl-5 pr-44 shadow-sm backdrop-blur-sm focus-visible:ring-primary"
+                  className="h-14 rounded-full border-muted-foreground/20 bg-white pl-5 pr-44 shadow-sm backdrop-blur-sm focus-visible:ring-primary"
                   aria-invalid={Boolean(error)}
                   required
                 />
@@ -145,7 +148,7 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
                 value={doors}
                 onChange={(event) => setDoors(event.target.value)}
                 aria-label={dict.doorsLabel}
-                className={`h-12 w-full rounded-full border border-muted-foreground/20 bg-white/50 px-5 text-base shadow-sm backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-sm ${
+                className={`h-12 w-full rounded-full border border-muted-foreground/20 bg-white px-5 text-base shadow-sm backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-sm ${
                   doors ? "text-foreground" : "text-muted-foreground"
                 }`}
               >
@@ -160,8 +163,12 @@ export function WaitlistForm({ lang, dict }: WaitlistFormProps) {
               <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
                 <input type="text" name="website" tabIndex={-1} autoComplete="off" />
               </div>
-              {error ? <p className="ml-4 text-sm text-red-200">{error}</p> : null}
-              <p className="px-4 text-xs text-primary-foreground/80">
+              {error ? (
+                <p className={`ml-4 text-sm ${light ? "text-red-600" : "text-red-200"}`}>{error}</p>
+              ) : null}
+              <p
+                className={`px-4 text-xs ${light ? "text-muted-foreground" : "text-primary-foreground/80"}`}
+              >
                 {dict.privacyNote}{" "}
                 <a
                   href={PATHS.privacy(lang)}

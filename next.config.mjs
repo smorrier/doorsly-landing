@@ -9,6 +9,13 @@ const REQUIRED_AT_BUILD = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // The French site is retired for now; keep old links and ads working.
+  async redirects() {
+    return [
+      { source: "/fr", destination: "/en", permanent: false },
+      { source: "/fr/confidentialite", destination: "/en/privacy", permanent: false },
+    ];
+  },
 };
 
 export default function config(phase) {

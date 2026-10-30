@@ -1,8 +1,8 @@
 # Doorsly landing page
 
 getdoorsly.com: Next.js 14 (App Router), Tailwind, framer-motion. Property management software
-for landlords with 5 to 50 doors. The main call to action is texting Dora to get a demo account;
-the second is the waitlist.
+for small-to-medium Canadian landlords, covering the whole app. English only for now. The one call to
+action is the waitlist.
 
 ```bash
 npm install
@@ -14,12 +14,13 @@ npm run build
 
 | Path | What |
 |---|---|
-| `/` | Redirects to `/fr` or `/en` from `Accept-Language` (French when neither matches). The query string is kept. |
-| `/fr`, `/en` | The landing page. Point ads here directly. |
-| `/fr/confidentialite`, `/en/privacy` | Privacy policy (Québec Law 25). |
+| `/` | Redirects to `/en`. The query string is kept. |
+| `/en` | The landing page. Point ads here directly. |
+| `/fr`, `/fr/confidentialite` | Temporary redirects to `/en` and `/en/privacy`. The French site is retired for now; it is in git history (main before `content/whole-app-en`). |
+| `/en/privacy` | Privacy policy (Québec Law 25 and PIPEDA). |
 | `/api/waitlist` | Waitlist signup (POST). |
 
-All copy lives in `lib/i18n/dictionaries/{fr,en}.ts` (the policy in `privacy.{fr,en}.ts`), typed by
+All copy lives in `lib/i18n/dictionaries/en.ts` (the policy in `privacy.en.ts`), typed by
 `lib/i18n/types.ts`. Adding a key to the type makes the build fail until both languages have it.
 
 ## Environment variables
@@ -35,8 +36,8 @@ See `.env.example`. `NEXT_PUBLIC_*` values are inlined at build time, so redeplo
 | `NEXT_PUBLIC_GOOGLE_ADS_ID` | Google Ads tag (optional; without it only GA4 runs) |
 | `LOOPS_API_KEY` | Creates or updates a Loops contact per signup (secret) |
 | `SLACK_WEBHOOK_URL` | Slack notification per signup (secret) |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | Address behind the footer's Contact link (optional; without it the link is hidden) |
 | `NEXT_PUBLIC_PRIVACY_OFFICER_NAME`, `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` | Person in charge of personal information, shown in the privacy policy. Required: `next build` fails without them |
-| `NEXT_PUBLIC_DEMO_SMS_NUMBER` | Number behind the "text Dora" link (defaults to +14385333509) |
 
 Every tracker variable is optional, each on its own: with one unset, that tracker never loads and
 the others are unaffected (for example GA4 without the Ads tag). A Google event is only sent when a
@@ -47,7 +48,7 @@ least one of `LOOPS_API_KEY` and `SLACK_WEBHOOK_URL`.
 
 - Set `NEXT_PUBLIC_PRIVACY_OFFICER_NAME` and `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` (the person in
   charge of personal information; the policy shows both). The build fails if either is missing.
-- Read the policy's retention periods (`privacy.{fr,en}.ts`, section "How long we keep it") and
+- Read the policy's retention periods (`privacy.en.ts`, section "How long we keep it") and
   make them true: waitlist data deleted within 24 months; Google Analytics data retention set to
   14 months (GA4 > Admin > Data collection and modification > Data retention).
 - In Loops, create these contact properties (type: string) before the first signup:
@@ -77,9 +78,6 @@ Consent is opt-in, with separate Analytics and Advertising choices, saved in the
 |---|---|---|---|---|
 | Page view | each page load | `PageView` | | GA4 automatic `page_view` |
 | Waitlist signup succeeds | `/api/waitlist` returns OK | `Lead` + `eventID` | `Lead`, same `event_id` | `generate_lead` (`lead_source`, `language`) |
-| "Text Dora" link clicked | click on either SMS link | `Contact` | | `demo_sms_click` (`link_location`, `language`) |
-
-Only the click is tracked. Whether the text was actually sent, and which ad it came from, is not.
 
 Meta deduplicates the Pixel and server `Lead` on `event_id` + event name. The server event carries
 a SHA-256 hash of the lowercased email, `fbp`/`fbc` (cookies, or built from `fbclid`), the client
@@ -88,7 +86,7 @@ URL. There is no public relay endpoint.
 
 ## Ads Manager URL parameters
 
-Link ads straight to `https://getdoorsly.com/fr` or `https://getdoorsly.com/en` and set, in the
+Link ads straight to `https://getdoorsly.com/en` and set, in the
 ad's URL parameters:
 
 ```
@@ -119,17 +117,32 @@ the ad parameters, `eventId`, `pageUrl` and the hidden `website` honeypot.
    `googletagmanager.com`, `google-analytics.com` or `doubleclick.net`, and only `dl_consent` may be
    set after you answer. "Reject all" must keep it that way.
 2. **Meta Test events.** Set `META_CAPI_TEST_EVENT_CODE`, redeploy, open Events Manager > Test events,
-   enter the site URL, accept Advertising, click the SMS link, then join the waitlist. Expect
-   `PageView`, `Contact` and `Lead` from Browser, and `Lead` from Server, marked as deduplicated
+   enter the site URL, accept Advertising, then join the waitlist. Expect
+   `PageView` and `Lead` from Browser, and `Lead` from Server, marked as deduplicated
    (one `Lead`, "Browser and Server"). Check the match-quality fields (email, IP, user agent,
    `fbp`/`fbc`). Then remove `META_CAPI_TEST_EVENT_CODE` and redeploy.
 3. **GA4 DebugView.** Connect the site in Tag Assistant (tagassistant.google.com), accept
-   Analytics, then check Admin > DebugView for `page_view`, `demo_sms_click` and `generate_lead`.
+   Analytics, then check Admin > DebugView for `page_view` and `generate_lead`.
    With only Advertising accepted, GA4 must show nothing.
-4. **Signup storage.** Join with a test address from `/fr?utm_source=meta&utm_medium=paid_social&utm_campaign=test&utm_content=ad1`:
+4. **Signup storage.** Join with a test address from `/en?utm_source=meta&utm_medium=paid_social&utm_campaign=test&utm_content=ad1`:
    Slack shows the language, doors and UTM lines; the Loops contact has source `waitlist` and the
    properties filled in.
 5. **Withdrawal.** Footer > Cookie preferences > turn both off > save: `_ga*`, `_gcl_*`, `_fbp`,
    `_fbc` are deleted and further clicks send nothing.
-6. **Previews.** Share `/fr` and `/en` in the Meta Sharing Debugger and check the title,
+6. **Previews.** Share `/en` in the Meta Sharing Debugger and check the title,
    description and the 1200x630 image; check `hreflang` with a search-console URL inspection.
+
+## Screenshots and video
+
+The page ships text-only. Each feature block and the hero accept an optional `media`
+(`{ src, alt, width, height }`) in `lib/i18n/dictionaries/en.ts`; add one and the block lays out
+with the image beside the text. Put images in `public/` (no mp4s in git: host video elsewhere).
+Screens the copy was written for: the Suggested payments card on the rents page (`etransfers`), the
+rents page with Charged, Collected and Owed and the unpaid-only filter (`owed`), a unit's documents
+folder with the Send for signature dialog (`leases`), the inbox with email and text threads
+(`inbox`), the calendar week view (`work-orders`), the unit listing tab's ad generator
+(`listings`), and the ep1 e-Transfer poster for the hero.
+
+## Not on the page yet
+
+Pricing (no FAQ or beta cost line until decided) and a founder byline. The contact link appears once `NEXT_PUBLIC_CONTACT_EMAIL` is set.

@@ -78,8 +78,8 @@ export const privacyEn: PrivacyDoc = {
         [
           "Slack: each waitlist signup (email, doors range, language and campaign parameters) is posted to our private team channel.",
           "Loops: our email service provider stores your waitlist contact and sends our launch emails.",
-          "Meta (Facebook and Instagram), only if you accepted Advertising: the Meta Pixel in your browser and our server send events such as page view, waitlist signup and text-link tap. For a signup, our server also sends a hashed (one-way encrypted) email address, your IP address, your browser and ad identifiers, so Meta can count the signup once and match it to the ad.",
-          "Google, only if you accepted Analytics or Advertising: Google Analytics and the Google Ads tag receive page views and the events generate_lead and demo_sms_click.",
+          "Meta (Facebook and Instagram), only if you accepted Advertising: the Meta Pixel in your browser and our server send events such as page view and waitlist signup. For a signup, our server also sends a hashed (one-way encrypted) email address, your IP address, your browser and ad identifiers, so Meta can count the signup once and match it to the ad.",
+          "Google, only if you accepted Analytics or Advertising: Google Analytics and the Google Ads tag receive page views and the event generate_lead.",
           "Our website hosting provider processes requests to the site on our behalf.",
         ],
         "These providers may process data outside Québec and Canada, including in the United States, where privacy laws may differ. We send them only what is described here, and we do not sell personal information.",

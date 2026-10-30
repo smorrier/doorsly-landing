@@ -2,11 +2,9 @@
 export const DOORS_VALUES = ["1-4", "5-20", "21-50", "50+"] as const;
 export type DoorsValue = (typeof DOORS_VALUES)[number];
 
-type Feature = { title: string; description: string };
-
 /**
  * Every visible string, one object per language. Plain data only: it is passed from server
- * components to client components, so no functions. `{phone}` style tokens are replaced at render.
+ * components to client components, so no functions.
  */
 /** A paragraph (string) or a bullet list (string[]). Tokens: {officerName}, {officerEmail}, {cookiePrefs}. */
 export type PolicyBlock = string | string[];
@@ -29,46 +27,54 @@ export type PrivacyDoc = {
 
 type ConsentCategoryCopy = { title: string; description: string };
 
+type Media = { src: string; alt: string; width: number; height: number };
+
+export type FeatureBlock = {
+  id: string;
+  title: string;
+  /** Direct answer, 40 to 60 words, shown in bold. */
+  answer: string;
+  /** Extra paragraphs, folded behind "More detail". */
+  more: string[];
+  /** Product screenshot. Leave out until a real one exists: the block then renders text only. */
+  media?: Media;
+};
+
 export type Dictionary = {
   meta: {
     title: string;
     description: string;
-    /** Open Graph locale, e.g. fr_CA */
+    /** Open Graph locale, e.g. en_CA */
     ogLocale: string;
     ogImageAlt: string;
   };
   og: { headline: string; subline: string };
   header: { cta: string; homeAria: string };
-  language: { switchTo: string; switchAria: string };
-  sms: {
-    /** Text typed into the message when the SMS link opens. */
-    body: string;
-    linkAria: string;
-  };
   hero: {
     badge: string;
     titleLead: string;
     titleAccent: string;
     subtitle: string;
-    demoEyebrow: string;
-    demoPrompt: string;
-    noSignup: string;
+    /** Poster or video still. Leave out until it exists. */
+    media?: Media;
   };
-  how: { title: string; subtitle: string; features: Feature[] };
-  about: {
+  pain: { title: string; items: { title: string; body: string }[] };
+  app: {
     title: string;
-    paragraphs: string[];
-    whyTitle: string;
-    whyItems: string[];
+    features: FeatureBlock[];
+    alsoTitle: string;
+    alsoItems: string[];
+    moreLabel: string;
   };
   fit: {
     title: string;
-    subtitle: string;
-    goodTitle: string;
-    goodItems: string[];
-    badTitle: string;
-    badItems: string[];
+    forTitle: string;
+    forBody: string;
+    notTitle: string;
+    notBody: string;
   };
+  beta: { title: string; steps: { title: string; body: string }[] };
+  faq: { title: string; items: { question: string; answer: string }[] };
   waitlist: {
     title: string;
     body: string;
@@ -86,13 +92,12 @@ export type Dictionary = {
     successTitle: string;
     successBody: string;
   };
-  mockup: { userMessage: string; doraMessage: string; inputPlaceholder: string };
   footer: {
-    readyLabel: string;
-    textPrompt: string;
+    tagline: string;
     rights: string;
     legalNavAria: string;
     privacyLabel: string;
+    contactLabel: string;
   };
   consent: {
     bannerTitle: string;
