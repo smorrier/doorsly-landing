@@ -15,7 +15,7 @@ export const privacyEn: PrivacyDoc = {
       blocks: [
         "Doorsly is property management software for landlords with 5 to 50 doors. This website, getdoorsly.com, presents Doorsly and lets you join a waitlist.",
         "The person in charge of protecting personal information is {officerName}, reachable at {officerEmail}.",
-        "This policy follows Québec’s Act respecting the protection of personal information in the private sector (Law 25) and Canada’s PIPEDA. It covers this website only. When you text Dora, your message travels through your phone’s messaging app and your carrier to the Doorsly demo service, which is separate from this website. This policy does not describe that service.",
+        "This policy follows Québec’s Act respecting the protection of personal information in the private sector (Law 25) and Canada’s PIPEDA. It covers this website only.",
       ],
     },
     {

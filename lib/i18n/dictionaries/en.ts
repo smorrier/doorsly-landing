@@ -8,17 +8,17 @@ export const en: Dictionary = {
     description:
       "Rent, e-transfers, leases, work orders, documents and tenant messages in one place, built for small Canadian landlords. Join the Doorsly closed beta waitlist.",
     ogLocale: "en_CA",
-    ogImageAlt: "Doorsly: property management without the spreadsheets, for Canadian landlords",
+    ogImageAlt: "Doorsly: your rentals, all in one place, for Canadian landlords",
   },
   og: {
-    headline: "Property management without the spreadsheets",
+    headline: "Your rentals, all in one place",
     subline: "For small-to-medium Canadian landlords. Join the closed beta waitlist.",
   },
   header: { cta: "Join the waitlist", homeAria: "Doorsly home" },
   hero: {
     badge: "Closed beta",
-    titleLead: "Property management for Canadian landlords,",
-    titleAccent: "without the spreadsheets",
+    titleLead: "Your rentals,",
+    titleAccent: "all in one place",
     subtitle: "Rent, tenants, leases, work orders, documents and your inbox, in one place.",
   },
   pain: {
@@ -139,7 +139,6 @@ export const en: Dictionary = {
       "Reusable email templates that fill in each tenant’s name and details",
       "Expenses, with receipt photos you can upload",
       "Revenue reports built from your payment records",
-      "Dora, an assistant that looks things up and drafts messages for you to review",
     ],
   },
   fit: {
@@ -226,7 +225,7 @@ export const en: Dictionary = {
     successBody: "We’ll email you as soon as we’re ready for you.",
   },
   footer: {
-    tagline: "Property management without the spreadsheets.",
+    tagline: "Your rentals, all in one place.",
     rights: "All rights reserved.",
     legalNavAria: "Legal",
     privacyLabel: "Privacy policy",
