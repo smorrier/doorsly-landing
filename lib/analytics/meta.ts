@@ -8,9 +8,8 @@ import { hasConsent } from "@/lib/consent/client";
  * |-----------|---------------------------------------------|---------|---------------------------|
  * | PageView  | each page view (path change)                | yes     |                           |
  * | Lead      | a waitlist signup succeeds                  | yes     | yes, same event_id        |
- * | Contact   | the "text Dora" SMS link is clicked         | yes     |                           |
  */
-export type MetaEventName = "PageView" | "Lead" | "Contact";
+export type MetaEventName = "PageView" | "Lead";
 
 type Fbq = ((...args: unknown[]) => void) & {
   callMethod?: (...args: unknown[]) => void;

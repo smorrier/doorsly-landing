@@ -20,7 +20,7 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
     lang: "en",
     title: privacy.metaTitle,
     description: privacy.metaDescription,
-    paths: { fr: PATHS.privacy("fr"), en: PATHS.privacy("en") },
+    paths: { en: PATHS.privacy("en") },
   });
 }
 

@@ -11,7 +11,7 @@ export function generateImageMetadata({ params }: { params: { lang: string } }) 
 }
 
 export default function OpenGraphImage({ params }: { params: { lang: string } }) {
-  const { og } = getDictionary(isLang(params.lang) ? params.lang : "fr");
+  const { og } = getDictionary(isLang(params.lang) ? params.lang : "en");
 
   return new ImageResponse(
     (

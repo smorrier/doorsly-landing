@@ -10,12 +10,11 @@ import { ADS_ID, GA_ID } from "./google-config";
  * | Event           | Fired when                          | Params                |
  * |-----------------|-------------------------------------|-----------------------|
  * | generate_lead   | a waitlist signup succeeds          | lead_source, language |
- * | demo_sms_click  | the "text Dora" SMS link is clicked | link_location, language |
  *
  * Each tag is configured only once its own category is granted: GA4 needs Analytics, the Ads tag
  * needs Advertising. Consent Mode v2 starts with all four signals denied.
  */
-export type GoogleEventName = "generate_lead" | "demo_sms_click";
+export type GoogleEventName = "generate_lead";
 
 export type Gtag = (...args: unknown[]) => void;
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { LANGS, otherLang, type Lang } from "@/lib/i18n/config";
+import { LANGS, type Lang } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { SITE_URL } from "@/lib/site";
 
@@ -30,7 +30,6 @@ export function pageMetadata({ lang, title, description, paths }: PageSeo): Meta
       title,
       description,
       locale: dict.meta.ogLocale,
-      alternateLocale: [getDictionary(otherLang(lang)).meta.ogLocale],
     },
     twitter: { card: "summary_large_image", title, description },
   };
