@@ -9,7 +9,11 @@ export function buildSlackText(signup: WaitlistSignup): string {
   const lines = [`New Doorsly waitlist signup: ${escapeSlack(signup.email)}`];
   lines.push(`• Language: ${signup.language}`);
   lines.push(`• Doors: ${signup.doors ?? "not given"}`);
-  const entries = Object.entries(signup.attribution);
+  // Ad click IDs are advertising identifiers, kept out of Slack: the signup doesn't know whether
+  // the visitor accepted Advertising cookies.
+  const entries = Object.entries(signup.attribution).filter(
+    ([key]) => key !== "fbclid" && key !== "gclid",
+  );
   if (entries.length === 0) {
     lines.push("• Source: direct (no campaign parameters)");
   } else {

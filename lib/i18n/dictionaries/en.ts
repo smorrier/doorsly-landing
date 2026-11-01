@@ -21,7 +21,7 @@ export const en: Dictionary = {
     titleAccent: "all in one place",
     subtitle: "Rent, tenants, leases, work orders, documents and your inbox, in one place.",
     betaNote:
-      "We’re letting in a small number of landlords at a time and setting each one up personally.",
+      "We’re letting in a small number of landlords at a time. We’ll email you when there’s a spot.",
     learnMore: "Learn more about Doorsly",
   },
   pain: {
@@ -213,7 +213,7 @@ export const en: Dictionary = {
   },
   waitlist: {
     title: "Join the Doorsly waitlist",
-    body: "Closed beta. We’re letting in a small number of landlords at a time and setting each one up personally. We’ll reach out when there’s a spot.",
+    body: "Closed beta. We’re letting in a small number of landlords at a time. We’ll email you when there’s a spot.",
     emailPlaceholder: "you@example.com",
     emailLabel: "Email address",
     doorsLabel: "How many doors do you manage? (optional)",

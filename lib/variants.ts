@@ -13,7 +13,7 @@ export const VARIANTS: Variant[] = [
       titleLead: "An e-transfer lands.",
       titleAccent: "Know whose it is.",
       subtitle:
-        "Doorsly turns the Interac e-transfer notifications in your inbox into suggested payments, each with a tenant already matched. You confirm it.",
+        "Connect your Gmail or Outlook and Doorsly lists your Interac e-transfer notifications as suggested payments, each with a suggested tenant. You confirm or dismiss it.",
     },
   },
   {
