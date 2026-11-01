@@ -17,21 +17,21 @@ type LandingPageProps = {
 
 type MediaProps = NonNullable<Dictionary["hero"]["media"]>;
 
+const isWide = (media: MediaProps) => media.width / media.height > 2;
+
 function Media({ media, priority = false }: { media: MediaProps; priority?: boolean }) {
-  // Wide table screenshots are unreadable shrunk to a phone: below md keep them near full size
-  // and let the visitor swipe sideways.
-  const wide = media.width / media.height > 2;
+  // Wide table screenshots are unreadable shrunk to a phone, so they are hidden below md.
   return (
-    <div className={wide ? "-mx-4 overflow-x-auto px-4 pb-2 md:mx-0 md:overflow-visible md:px-0 md:pb-0" : undefined}>
+    <>
       <Image
         src={media.src}
         alt={media.alt}
         width={media.width}
         height={media.height}
         priority={priority}
-        className={`h-auto w-full rounded-2xl border shadow-sm ${wide ? "min-w-[600px] md:min-w-0" : ""}`}
+        className="h-auto w-full rounded-2xl border shadow-sm"
       />
-    </div>
+    </>
   );
 }
 
@@ -93,7 +93,7 @@ export function LandingPage({ lang, dict, short = false }: LandingPageProps) {
                 </div>
               </div>
               {dict.hero.media ? (
-                <div className="w-full max-w-2xl lg:max-w-none">
+                <div className={`w-full max-w-2xl lg:max-w-none ${isWide(dict.hero.media) ? "hidden md:block" : ""}`}>
                   <Media media={dict.hero.media} priority />
                 </div>
               ) : null}
@@ -158,7 +158,7 @@ export function LandingPage({ lang, dict, short = false }: LandingPageProps) {
                     </details>
                   </div>
                   {feature.media ? (
-                    <div className={index % 2 === 1 ? "lg:order-1" : ""}>
+                    <div className={`${index % 2 === 1 ? "lg:order-1" : ""} ${isWide(feature.media) ? "hidden md:block" : ""}`}>
                       <Media media={feature.media} />
                     </div>
                   ) : null}
