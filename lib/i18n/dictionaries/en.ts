@@ -20,6 +20,14 @@ export const en: Dictionary = {
     titleLead: "Your rentals,",
     titleAccent: "all in one place",
     subtitle: "Rent, tenants, leases, work orders, documents and your inbox, in one place.",
+    betaNote:
+      "We’re letting in a small number of landlords at a time and setting each one up personally.",
+    media: {
+      src: "/screens/etransfers.png",
+      alt: "Doorsly rents page: a Suggested payments list showing each e-transfer sender, the amount, and a suggested tenant with a Confirm button.",
+      width: 668,
+      height: 245,
+    },
   },
   pain: {
     title: "Sound familiar?",
@@ -204,7 +212,7 @@ export const en: Dictionary = {
   },
   waitlist: {
     title: "Join the Doorsly waitlist",
-    body: "Closed beta for Canadian landlords. We’ll email you when there’s room.",
+    body: "Closed beta. We’re letting in a small number of landlords at a time and setting each one up personally. We’ll reach out when there’s a spot.",
     emailPlaceholder: "you@example.com",
     emailLabel: "Email address",
     doorsLabel: "How many doors do you manage? (optional)",

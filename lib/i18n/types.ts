@@ -55,6 +55,8 @@ export type Dictionary = {
     titleLead: string;
     titleAccent: string;
     subtitle: string;
+    /** One line under the subtitle: who gets in and how. */
+    betaNote: string;
     /** Poster or video still. Leave out until it exists. */
     media?: Media;
   };

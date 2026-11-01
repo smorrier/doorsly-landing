@@ -116,7 +116,7 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
             exit={{ opacity: 0 }}
           >
             <form onSubmit={onSubmit} className="space-y-3">
-              <div className="relative flex items-center">
+              <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-0">
                 <Input
                   type="email"
                   value={email}
@@ -124,7 +124,7 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
                   placeholder={dict.emailPlaceholder}
                   aria-label={dict.emailLabel}
                   autoComplete="email"
-                  className="h-14 rounded-full border-muted-foreground/20 bg-white pl-5 pr-44 shadow-sm backdrop-blur-sm focus-visible:ring-primary"
+                  className="h-14 rounded-full border-muted-foreground/20 bg-white pl-5 pr-5 shadow-sm sm:pr-44 backdrop-blur-sm focus-visible:ring-primary"
                   aria-invalid={Boolean(error)}
                   required
                 />
@@ -132,7 +132,7 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
                   type="submit"
                   size="sm"
                   disabled={isSubmitting}
-                  className="absolute right-1.5 h-11 rounded-full bg-primary px-6 font-medium text-primary-foreground transition-all hover:bg-primary/90"
+                  className="h-12 w-full rounded-full bg-primary px-6 sm:absolute sm:right-1.5 sm:h-11 sm:w-auto font-medium text-primary-foreground transition-all hover:bg-primary/90"
                 >
                   {isSubmitting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
