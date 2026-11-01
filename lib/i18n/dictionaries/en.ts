@@ -22,6 +22,7 @@ export const en: Dictionary = {
     subtitle: "Rent, tenants, leases, work orders, documents and your inbox, in one place.",
     betaNote:
       "We’re letting in a small number of landlords at a time and setting each one up personally.",
+    learnMore: "Learn more about Doorsly",
   },
   pain: {
     title: "Sound familiar?",

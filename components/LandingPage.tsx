@@ -91,6 +91,14 @@ export function LandingPage({ lang, dict, short = false }: LandingPageProps) {
                 <div id="waitlist" className="max-w-md scroll-mt-24 rounded-2xl border bg-slate-50 p-5 sm:p-6">
                   <WaitlistForm lang={lang} dict={dict.waitlist} tone="light" />
                 </div>
+                {short ? (
+                  <a
+                    href={PATHS.home(lang)}
+                    className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-primary underline-offset-4 hover:underline"
+                  >
+                    {dict.hero.learnMore} &rarr;
+                  </a>
+                ) : null}
               </div>
               {dict.hero.media ? (
                 <div className={`w-full max-w-2xl lg:max-w-none ${isWide(dict.hero.media) ? "hidden md:block" : ""}`}>
@@ -214,6 +222,14 @@ export function LandingPage({ lang, dict, short = false }: LandingPageProps) {
                 </li>
               ))}
             </ol>
+            {short ? (
+              <a
+                href={PATHS.home(lang)}
+                className="mt-4 inline-flex min-h-11 items-center text-sm font-medium text-primary underline-offset-4 hover:underline"
+              >
+                {dict.hero.learnMore} &rarr;
+              </a>
+            ) : null}
           </div>
         </section>
 
