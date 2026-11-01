@@ -88,7 +88,7 @@ export function LandingPage({ lang, dict, short = false }: LandingPageProps) {
                 </div>
               </div>
               {dict.hero.media ? (
-                <div className="mx-auto w-full max-w-sm lg:max-w-md">
+                <div className="w-full max-w-sm lg:mx-auto lg:max-w-md">
                   <Media media={dict.hero.media} priority />
                 </div>
               ) : null}
