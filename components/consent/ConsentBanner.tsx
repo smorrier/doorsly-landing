@@ -89,14 +89,14 @@ export function ConsentBanner({ dict, privacyHref, privacyLabel }: ConsentBanner
               </p>
             </div>
             <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
-              <Button variant="ghost" size="sm" className="order-last col-span-2 sm:order-first" onClick={openDialog}>
-                {dict.customize}
-              </Button>
               <Button variant="outline" size="sm" className="min-w-28" onClick={rejectAllConsent}>
                 {dict.rejectAll}
               </Button>
               <Button variant="outline" size="sm" className="min-w-28" onClick={acceptAllConsent}>
                 {dict.acceptAll}
+              </Button>
+              <Button variant="ghost" size="sm" className="col-span-2 sm:order-first" onClick={openDialog}>
+                {dict.customize}
               </Button>
             </div>
           </div>
