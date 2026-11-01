@@ -148,7 +148,7 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
                 type="submit"
                 size="sm"
                 disabled={isSubmitting}
-                className="h-12 w-full rounded-full bg-primary px-6 font-medium text-primary-foreground transition-all hover:bg-primary/90 sm:absolute sm:right-1.5 sm:mt-0 sm:top-1.5 sm:h-11 sm:w-auto"
+                className="h-12 w-full rounded-full bg-primary px-6 font-medium text-primary-foreground transition-all hover:bg-primary/90 sm:absolute sm:right-1.5 sm:!mt-0 sm:top-1.5 sm:h-11 sm:w-auto"
               >
                 {isSubmitting ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
