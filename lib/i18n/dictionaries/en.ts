@@ -225,7 +225,8 @@ export const en: Dictionary = {
       "50+": "More than 50 doors",
     },
     submit: "Join the waitlist",
-    privacyNote: "We only use your email to tell you when there’s room in the closed beta.",
+    privacyNote:
+      "By joining, you agree that Doorsly may email you about the closed beta and launch. Unsubscribe any time.",
     privacyLinkLabel: "Privacy policy",
     errorInvalidEmail: "Please enter a valid email address.",
     errorGeneric: "Sorry, we couldn’t add you right now. Please try again.",
