@@ -3,7 +3,7 @@ import type { Dictionary } from "@/lib/i18n/types";
 /** Hero overrides for one ad. The ad's link is /en/lp/<slug>?utm_content=<slug>. */
 export type Variant = {
   slug: string;
-  hero: Pick<Dictionary["hero"], "titleLead" | "titleAccent" | "subtitle" | "media">;
+  hero: Pick<Dictionary["hero"], "titleLead" | "titleAccent" | "subtitle">;
 };
 
 export const VARIANTS: Variant[] = [
@@ -14,12 +14,6 @@ export const VARIANTS: Variant[] = [
       titleAccent: "Know whose it is.",
       subtitle:
         "Doorsly turns the Interac e-transfer notifications in your inbox into suggested payments, each with a tenant already matched. You confirm it.",
-      media: {
-        src: "/screens/etransfers.png",
-        alt: "Doorsly rents page: a Suggested payments list showing each e-transfer sender, the amount, and a suggested tenant with a Confirm button.",
-        width: 668,
-        height: 245,
-      },
     },
   },
   {
@@ -29,12 +23,6 @@ export const VARIANTS: Variant[] = [
       titleAccent: "One page, one answer.",
       subtitle:
         "See what is charged, collected and owed across your active leases, with every lease’s payment history one click away.",
-      media: {
-        src: "/screens/owed-unpaid.png",
-        alt: "Doorsly rents page filtered to unpaid leases, listing each property and unit with the tenant, the monthly rent, and the amount owed.",
-        width: 668,
-        height: 295,
-      },
     },
   },
   {
@@ -44,12 +32,6 @@ export const VARIANTS: Variant[] = [
       titleAccent: "Send them to sign.",
       subtitle:
         "Keep each lease with its property and unit, send it out for e-signature, and watch it go from Awaiting signature to Signed.",
-      media: {
-        src: "/screens/leases-signed.png",
-        alt: "Doorsly documents: the lease folder for Glebe Triplex, Unit 1, with Lease renewal.pdf marked Signed and a Lease Renewal / Non-Renewal Notice tag.",
-        width: 720,
-        height: 616,
-      },
     },
   },
 ];

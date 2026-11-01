@@ -22,12 +22,6 @@ export const en: Dictionary = {
     subtitle: "Rent, tenants, leases, work orders, documents and your inbox, in one place.",
     betaNote:
       "We’re letting in a small number of landlords at a time and setting each one up personally.",
-    media: {
-      src: "/screens/etransfers.png",
-      alt: "Doorsly rents page: a Suggested payments list showing each e-transfer sender, the amount, and a suggested tenant with a Confirm button.",
-      width: 668,
-      height: 245,
-    },
   },
   pain: {
     title: "Sound familiar?",
