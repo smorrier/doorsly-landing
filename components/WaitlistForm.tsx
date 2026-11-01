@@ -115,8 +115,8 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <form onSubmit={onSubmit} className="space-y-3">
-              <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-0">
+            <form onSubmit={onSubmit} className="relative space-y-3">
+              <div className="relative flex items-center">
                 <Input
                   type="email"
                   value={email}
@@ -124,25 +124,10 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
                   placeholder={dict.emailPlaceholder}
                   aria-label={dict.emailLabel}
                   autoComplete="email"
-                  className="h-14 rounded-full border-muted-foreground/20 bg-white pl-5 pr-5 shadow-sm sm:pr-44 backdrop-blur-sm focus-visible:ring-primary"
+                  className="h-14 rounded-full border-muted-foreground/20 bg-white pl-5 pr-5 shadow-sm backdrop-blur-sm sm:pr-44 focus-visible:ring-primary"
                   aria-invalid={Boolean(error)}
                   required
                 />
-                <Button
-                  type="submit"
-                  size="sm"
-                  disabled={isSubmitting}
-                  className="h-12 w-full rounded-full bg-primary px-6 sm:absolute sm:right-1.5 sm:h-11 sm:w-auto font-medium text-primary-foreground transition-all hover:bg-primary/90"
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <>
-                      {dict.submit}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </>
-                  )}
-                </Button>
               </div>
               <select
                 value={doors}
@@ -159,6 +144,21 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
                   </option>
                 ))}
               </select>
+              <Button
+                type="submit"
+                size="sm"
+                disabled={isSubmitting}
+                className="h-12 w-full rounded-full bg-primary px-6 font-medium text-primary-foreground transition-all hover:bg-primary/90 sm:absolute sm:right-1.5 sm:mt-0 sm:top-1.5 sm:h-11 sm:w-auto"
+              >
+                {isSubmitting ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    {dict.submit}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
+              </Button>
               {/* Honeypot: hidden from people and assistive tech, tempting to bots. */}
               <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
                 <input type="text" name="website" tabIndex={-1} autoComplete="off" />

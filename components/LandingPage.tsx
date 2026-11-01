@@ -18,15 +18,20 @@ type LandingPageProps = {
 type MediaProps = NonNullable<Dictionary["hero"]["media"]>;
 
 function Media({ media, priority = false }: { media: MediaProps; priority?: boolean }) {
+  // Wide table screenshots are unreadable shrunk to a phone: below md keep them near full size
+  // and let the visitor swipe sideways.
+  const wide = media.width / media.height > 2;
   return (
-    <Image
-      src={media.src}
-      alt={media.alt}
-      width={media.width}
-      height={media.height}
-      priority={priority}
-      className="h-auto w-full rounded-2xl border shadow-sm"
-    />
+    <div className={wide ? "-mx-4 overflow-x-auto px-4 pb-2 md:mx-0 md:overflow-visible md:px-0 md:pb-0" : undefined}>
+      <Image
+        src={media.src}
+        alt={media.alt}
+        width={media.width}
+        height={media.height}
+        priority={priority}
+        className={`h-auto w-full rounded-2xl border shadow-sm ${wide ? "min-w-[600px] md:min-w-0" : ""}`}
+      />
+    </div>
   );
 }
 
@@ -62,7 +67,7 @@ export function LandingPage({ lang, dict, short = false }: LandingPageProps) {
           <div className="bg-grid-pattern absolute inset-0 -z-10 opacity-[0.03]" />
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-center gap-10 lg:gap-12 ${
+              className={`grid grid-cols-1 items-center gap-10 lg:gap-12 ${
                 dict.hero.media ? "lg:grid-cols-2" : ""
               }`}
             >
