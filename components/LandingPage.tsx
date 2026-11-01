@@ -11,25 +11,32 @@ import { CONTACT_EMAIL, PATHS } from "@/lib/site";
 type LandingPageProps = {
   lang: Lang;
   dict: Dictionary;
+  /** Shorter page for ad traffic: no feature detail, fit or FAQ sections. */
+  short?: boolean;
 };
 
 type MediaProps = NonNullable<Dictionary["hero"]["media"]>;
 
+const isWide = (media: MediaProps) => media.width / media.height > 2;
+
 function Media({ media, priority = false }: { media: MediaProps; priority?: boolean }) {
+  // Wide table screenshots are unreadable shrunk to a phone, so they are hidden below md.
   return (
-    <Image
-      src={media.src}
-      alt={media.alt}
-      width={media.width}
-      height={media.height}
-      priority={priority}
-      className="h-auto w-full rounded-2xl border shadow-sm"
-    />
+    <>
+      <Image
+        src={media.src}
+        alt={media.alt}
+        width={media.width}
+        height={media.height}
+        priority={priority}
+        className="h-auto w-full rounded-2xl border shadow-sm"
+      />
+    </>
   );
 }
 
 /** Server component: no client JavaScript except the forms and the cookie link. */
-export function LandingPage({ lang, dict }: LandingPageProps) {
+export function LandingPage({ lang, dict, short = false }: LandingPageProps) {
   return (
     <div className="min-h-screen bg-background selection:bg-primary/20">
       <header className="glass fixed inset-x-0 top-0 z-50">
@@ -56,11 +63,11 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
       </header>
 
       <main className="pt-16">
-        <section className="relative overflow-hidden pb-16 pt-12 lg:pb-24 lg:pt-20">
+        <section className="relative overflow-hidden pb-16 pt-8 lg:pb-24 lg:pt-20">
           <div className="bg-grid-pattern absolute inset-0 -z-10 opacity-[0.03]" />
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-center gap-10 lg:gap-12 ${
+              className={`grid grid-cols-1 items-center gap-10 lg:gap-12 ${
                 dict.hero.media ? "lg:grid-cols-2" : ""
               }`}
             >
@@ -75,15 +82,26 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
                     {dict.hero.titleAccent}
                   </span>
                 </h1>
-                <p className="mb-8 max-w-xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+                <p className="mb-4 max-w-xl text-lg leading-relaxed text-muted-foreground sm:mb-8 sm:text-xl">
                   {dict.hero.subtitle}
+                </p>
+                <p className="mb-5 max-w-xl text-base text-muted-foreground sm:mb-6">
+                  {dict.hero.betaNote}
                 </p>
                 <div id="waitlist" className="max-w-md scroll-mt-24 rounded-2xl border bg-slate-50 p-5 sm:p-6">
                   <WaitlistForm lang={lang} dict={dict.waitlist} tone="light" />
                 </div>
+                {short ? (
+                  <a
+                    href={PATHS.home(lang)}
+                    className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-primary underline-offset-4 hover:underline"
+                  >
+                    {dict.hero.learnMore} &rarr;
+                  </a>
+                ) : null}
               </div>
               {dict.hero.media ? (
-                <div className="mx-auto w-full max-w-sm lg:max-w-md">
+                <div className={`w-full max-w-2xl lg:max-w-none ${isWide(dict.hero.media) ? "hidden md:block" : ""}`}>
                   <Media media={dict.hero.media} priority />
                 </div>
               ) : null}
@@ -107,6 +125,7 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
           </div>
         </section>
 
+        {!short ? (
         <section className="py-16 lg:py-24" aria-labelledby="app-heading">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h2
@@ -147,7 +166,7 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
                     </details>
                   </div>
                   {feature.media ? (
-                    <div className={index % 2 === 1 ? "lg:order-1" : ""}>
+                    <div className={`${index % 2 === 1 ? "lg:order-1" : ""} ${isWide(feature.media) ? "hidden md:block" : ""}`}>
                       <Media media={feature.media} />
                     </div>
                   ) : null}
@@ -165,7 +184,9 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
             </div>
           </div>
         </section>
+        ) : null}
 
+        {!short ? (
         <section className="border-t border-slate-100 bg-slate-50 py-16 lg:py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h2 className="mb-8 text-center text-3xl font-bold tracking-tight">
@@ -189,6 +210,7 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
             </div>
           </div>
         </section>
+        ) : null}
 
         <section className="py-16 lg:py-20">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
@@ -200,9 +222,18 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
                 </li>
               ))}
             </ol>
+            {short ? (
+              <a
+                href={PATHS.home(lang)}
+                className="mt-4 inline-flex min-h-11 items-center text-sm font-medium text-primary underline-offset-4 hover:underline"
+              >
+                {dict.hero.learnMore} &rarr;
+              </a>
+            ) : null}
           </div>
         </section>
 
+        {!short ? (
         <section className="border-t border-slate-100 py-16 lg:py-20">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
             <h2 className="mb-6 text-3xl font-bold tracking-tight">{dict.faq.title}</h2>
@@ -218,6 +249,7 @@ export function LandingPage({ lang, dict }: LandingPageProps) {
             </div>
           </div>
         </section>
+        ) : null}
 
         <section className="relative isolate overflow-hidden py-20">
           <div className="absolute inset-0 -z-20 bg-primary" />

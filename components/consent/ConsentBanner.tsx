@@ -73,7 +73,7 @@ export function ConsentBanner({ dict, privacyHref, privacyLabel }: ConsentBanner
         <div
           role="region"
           aria-label={dict.bannerTitle}
-          className="fixed inset-x-0 bottom-0 z-[90] p-3 sm:p-4"
+          className="fixed inset-x-0 bottom-0 z-[90] p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:p-4"
         >
           <div className="mx-auto flex max-w-4xl flex-col gap-3 rounded-2xl border bg-card p-4 text-card-foreground shadow-lg md:flex-row md:items-end md:gap-6">
             <div className="flex-1 space-y-1">
@@ -88,15 +88,15 @@ export function ConsentBanner({ dict, privacyHref, privacyLabel }: ConsentBanner
                 </a>
               </p>
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-              <Button variant="ghost" size="sm" onClick={openDialog}>
-                {dict.customize}
-              </Button>
-              <Button variant="outline" size="sm" className="min-w-28" onClick={rejectAllConsent}>
+            <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+              <Button variant="outline" size="sm" className="min-h-11 min-w-28" onClick={rejectAllConsent}>
                 {dict.rejectAll}
               </Button>
-              <Button variant="outline" size="sm" className="min-w-28" onClick={acceptAllConsent}>
+              <Button variant="outline" size="sm" className="min-h-11 min-w-28" onClick={acceptAllConsent}>
                 {dict.acceptAll}
+              </Button>
+              <Button variant="ghost" size="sm" className="col-span-2 min-h-11 sm:col-span-1" onClick={openDialog}>
+                {dict.customize}
               </Button>
             </div>
           </div>

@@ -6,14 +6,14 @@ export const privacyEn: PrivacyDoc = {
     "What personal information the Doorsly website collects, why, which cookies it uses, how long data is kept and how to exercise your rights.",
   title: "Privacy policy",
   updatedLabel: "Last updated",
-  updated: "October 26, 2026",
+  updated: "November 1, 2026",
   backLabel: "Back to Doorsly",
   sections: [
     {
       id: "about",
       title: "Who we are",
       blocks: [
-        "Doorsly is property management software for landlords with 5 to 50 doors. This website, getdoorsly.com, presents Doorsly and lets you join a waitlist.",
+        "Doorsly is property management software for landlords with 1 to 50 doors. This website, getdoorsly.com, presents Doorsly and lets you join a waitlist.",
         "The person in charge of protecting personal information is {officerName}, reachable at {officerEmail}.",
         "This policy follows Québec’s Act respecting the protection of personal information in the private sector (Law 25) and Canada’s PIPEDA. It covers this website only.",
       ],

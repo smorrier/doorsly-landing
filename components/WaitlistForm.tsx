@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useId, useState } from "react";
 import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -22,6 +22,7 @@ type WaitlistFormProps = {
 
 export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
   const light = tone === "light";
+  const errorId = useId();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
@@ -84,6 +85,30 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
     }
   };
 
+  // Two copies, one shown per breakpoint, so the tab order matches the layout: from sm up the
+  // button sits inside the email field, below that it comes last.
+  const submitButton = (className: string) => (
+    <Button
+      type="submit"
+      size="sm"
+      disabled={isSubmitting}
+      aria-busy={isSubmitting}
+      className={`rounded-full bg-primary px-6 font-medium text-primary-foreground transition-all hover:bg-primary/90 ${className}`}
+    >
+      {isSubmitting ? (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />
+          <span className="sr-only">{dict.submit}</span>
+        </>
+      ) : (
+        <>
+          {dict.submit}
+          <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+        </>
+      )}
+    </Button>
+  );
+
   return (
     <div className="mx-auto w-full max-w-md">
       <AnimatePresence mode="wait" initial={false}>
@@ -93,6 +118,7 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
+            role="status"
             className="flex flex-col items-center justify-center space-y-3 rounded-2xl border border-primary/10 bg-white p-6 text-center text-foreground"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -115,7 +141,7 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <form onSubmit={onSubmit} className="space-y-3">
+            <form onSubmit={onSubmit} noValidate className="relative space-y-3">
               <div className="relative flex items-center">
                 <Input
                   type="email"
@@ -124,31 +150,23 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
                   placeholder={dict.emailPlaceholder}
                   aria-label={dict.emailLabel}
                   autoComplete="email"
-                  className="h-14 rounded-full border-muted-foreground/20 bg-white pl-5 pr-44 shadow-sm backdrop-blur-sm focus-visible:ring-primary"
+                  className="h-14 rounded-full border-muted-foreground/20 bg-white pl-5 pr-5 shadow-sm backdrop-blur-sm sm:pr-44 focus-visible:ring-primary"
                   aria-invalid={Boolean(error)}
+                  aria-describedby={error ? errorId : undefined}
                   required
                 />
-                <Button
-                  type="submit"
-                  size="sm"
-                  disabled={isSubmitting}
-                  className="absolute right-1.5 h-11 rounded-full bg-primary px-6 font-medium text-primary-foreground transition-all hover:bg-primary/90"
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <>
-                      {dict.submit}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </>
-                  )}
-                </Button>
+                {submitButton("hidden h-11 sm:absolute sm:right-1.5 sm:flex")}
               </div>
+              {error ? (
+                <p id={errorId} role="alert" className={`ml-4 text-sm ${light ? "text-red-600" : "text-red-200"}`}>
+                  {error}
+                </p>
+              ) : null}
               <select
                 value={doors}
                 onChange={(event) => setDoors(event.target.value)}
                 aria-label={dict.doorsLabel}
-                className={`h-12 w-full rounded-full border border-muted-foreground/20 bg-white px-5 text-base shadow-sm backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-sm ${
+                className={`h-12 w-full rounded-full border border-muted-foreground/20 bg-white px-5 text-base shadow-sm backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   doors ? "text-foreground" : "text-muted-foreground"
                 }`}
               >
@@ -159,13 +177,11 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
                   </option>
                 ))}
               </select>
+              {submitButton("h-12 w-full sm:hidden")}
               {/* Honeypot: hidden from people and assistive tech, tempting to bots. */}
               <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
                 <input type="text" name="website" tabIndex={-1} autoComplete="off" />
               </div>
-              {error ? (
-                <p className={`ml-4 text-sm ${light ? "text-red-600" : "text-red-200"}`}>{error}</p>
-              ) : null}
               <p
                 className={`px-4 text-xs ${light ? "text-muted-foreground" : "text-primary-foreground/80"}`}
               >

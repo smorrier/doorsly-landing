@@ -55,6 +55,10 @@ export type Dictionary = {
     titleLead: string;
     titleAccent: string;
     subtitle: string;
+    /** One line under the subtitle: who gets in and how. */
+    betaNote: string;
+    /** Link to the full home page, shown on the short ad pages. */
+    learnMore: string;
     /** Poster or video still. Leave out until it exists. */
     media?: Media;
   };

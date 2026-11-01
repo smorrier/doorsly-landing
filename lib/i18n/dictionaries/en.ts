@@ -20,6 +20,9 @@ export const en: Dictionary = {
     titleLead: "Your rentals,",
     titleAccent: "all in one place",
     subtitle: "Rent, tenants, leases, work orders, documents and your inbox, in one place.",
+    betaNote:
+      "We’re letting in a small number of landlords at a time. We’ll email you when there’s a spot.",
+    learnMore: "Learn more about Doorsly",
   },
   pain: {
     title: "Sound familiar?",
@@ -76,6 +79,12 @@ export const en: Dictionary = {
       },
       {
         id: "leases",
+        media: {
+          src: "/screens/leases-signed.png",
+          alt: "Doorsly documents: the lease folder for Glebe Triplex, Unit 1, with Lease renewal.pdf marked Signed and a Lease Renewal / Non-Renewal Notice tag.",
+          width: 720,
+          height: 616,
+        },
         title: "Leases, e-signature and documents",
         answer:
           "Keep each lease in the folder for its property and unit, then send it out for e-signature to the tenants on it. Signers are the lease’s tenants who have an email address, preselected for you. The file shows Awaiting signature, then Signed. No printing, no scanning.",
@@ -204,7 +213,7 @@ export const en: Dictionary = {
   },
   waitlist: {
     title: "Join the Doorsly waitlist",
-    body: "Closed beta for Canadian landlords. We’ll email you when there’s room.",
+    body: "Closed beta. We’re letting in a small number of landlords at a time. We’ll email you when there’s a spot.",
     emailPlaceholder: "you@example.com",
     emailLabel: "Email address",
     doorsLabel: "How many doors do you manage? (optional)",
@@ -216,7 +225,8 @@ export const en: Dictionary = {
       "50+": "More than 50 doors",
     },
     submit: "Join the waitlist",
-    privacyNote: "We only use your email to tell you when there’s room in the closed beta.",
+    privacyNote:
+      "By joining, you agree that Doorsly may email you about the closed beta and launch. Unsubscribe any time.",
     privacyLinkLabel: "Privacy policy",
     errorInvalidEmail: "Please enter a valid email address.",
     errorGeneric: "Sorry, we couldn’t add you right now. Please try again.",
