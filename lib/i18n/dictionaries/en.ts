@@ -84,6 +84,12 @@ export const en: Dictionary = {
       },
       {
         id: "leases",
+        media: {
+          src: "/screens/leases-signed.png",
+          alt: "Doorsly documents: the lease folder for Glebe Triplex, Unit 1, with Lease renewal.pdf marked Signed and a Lease Renewal / Non-Renewal Notice tag.",
+          width: 720,
+          height: 616,
+        },
         title: "Leases, e-signature and documents",
         answer:
           "Keep each lease in the folder for its property and unit, then send it out for e-signature to the tenants on it. Signers are the lease’s tenants who have an email address, preselected for you. The file shows Awaiting signature, then Signed. No printing, no scanning.",

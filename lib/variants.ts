@@ -44,8 +44,12 @@ export const VARIANTS: Variant[] = [
       titleAccent: "Send them to sign.",
       subtitle:
         "Keep each lease with its property and unit, send it out for e-signature, and watch it go from Awaiting signature to Signed.",
-      // No lease screenshot yet. Set explicitly so the home page's image isn't inherited.
-      media: undefined,
+      media: {
+        src: "/screens/leases-signed.png",
+        alt: "Doorsly documents: the lease folder for Glebe Triplex, Unit 1, with Lease renewal.pdf marked Signed and a Lease Renewal / Non-Renewal Notice tag.",
+        width: 720,
+        height: 616,
+      },
     },
   },
 ];
