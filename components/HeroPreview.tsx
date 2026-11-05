@@ -16,7 +16,7 @@ const LEASES = [
 /** Decorative sketch of the rent overview. Sample data, hidden from assistive tech. */
 export function HeroPreview() {
   return (
-    <div aria-hidden="true" className="relative mx-auto w-full max-w-xl pb-24 pt-2">
+    <div aria-hidden="true" className="relative mx-auto w-full max-w-xl pb-28 pt-2">
       <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/10 via-blue-100/50 to-transparent" />
 
       <div className="rounded-2xl border bg-white shadow-xl shadow-primary/10">
@@ -65,7 +65,7 @@ export function HeroPreview() {
         </ul>
       </div>
 
-      <div className="absolute -bottom-0 -left-4 w-72 rounded-xl border bg-white p-4 shadow-xl shadow-primary/10">
+      <div className="absolute bottom-0 -left-4 w-72 rounded-xl border bg-white p-4 shadow-xl shadow-primary/10">
         <div className="mb-2 flex items-center gap-2 text-xs font-medium text-muted-foreground">
           <Mail className="h-3.5 w-3.5" />
           Suggested payment
