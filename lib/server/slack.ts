@@ -6,7 +6,7 @@ export function escapeSlack(value: string): string {
 }
 
 export function buildSlackText(signup: WaitlistSignup): string {
-  const lines = [`New Doorsly waitlist signup: ${escapeSlack(signup.email)}`];
+  const lines = [`New Doorsly signup started: ${escapeSlack(signup.email)}`];
   lines.push(`• Language: ${signup.language}`);
   lines.push(`• Doors: ${signup.doors ?? "not given"}`);
   // Ad click IDs are advertising identifiers, kept out of Slack: the signup doesn't know whether

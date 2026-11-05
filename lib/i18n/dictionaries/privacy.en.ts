@@ -37,7 +37,7 @@ export const privacyEn: PrivacyDoc = {
       title: "Why we use it",
       blocks: [
         [
-          "Signup details: to email you about your account and product news, and to understand which kinds of landlords and which campaigns are generating interest.",
+          "Signup details: to email you the link to create your account and emails about your account, and to understand which kinds of landlords and which campaigns are generating interest.",
           "Analytics (only with your consent): to measure how many people visit the page, start signing up or tap the text-message link.",
           "Advertising (only with your consent): to measure and improve our ads on Meta (Facebook and Instagram) and Google, including matching a signup to the ad that led to it.",
           "Technical details: to protect the form from abuse.",
@@ -50,7 +50,7 @@ export const privacyEn: PrivacyDoc = {
       blocks: [
         "Analytics and advertising cookies are off until you choose. The banner offers two separate choices, Analytics and Advertising, and Reject all is as easy as Accept all. Until you opt in, nothing is loaded from Google or Meta and nothing is sent to them.",
         "You can change your choice at any time with the “Cookie preferences” link at the bottom of every page: {cookiePrefs}. Withdrawing stops the trackers and removes their cookies from this site.",
-        "By submitting the sign-up form, you agree that we email you about your account and Doorsly news. Every email will include a way to unsubscribe, and you can also write to us at {officerEmail}.",
+        "By submitting the sign-up form, you ask us to email you the link to create your account, and we will email you about your account. We send marketing emails only if you separately ask for them. Every such email will include a way to unsubscribe, and you can also write to us at {officerEmail}. Every email will include a way to unsubscribe, and you can also write to us at {officerEmail}.",
       ],
     },
     {
@@ -78,6 +78,7 @@ export const privacyEn: PrivacyDoc = {
         [
           "Slack: each signup start (email, doors range, language and campaign parameters) is posted to our private team channel.",
           "Loops: our email service provider stores your contact and sends our emails.",
+          "The Doorsly app (app.getdoorsly.com, run by us): when you continue, your browser opens the app’s sign-up page, and the page address carries your email address and the campaign parameters. If you accepted Advertising, it also carries your Meta browser identifiers and the id of your signup event, so the app can tell Meta your account was created. The app has its own privacy policy.",
           "Meta (Facebook and Instagram), only if you accepted Advertising: the Meta Pixel in your browser and our server send events such as page view and signup. For a signup, our server also sends a hashed (one-way encrypted) email address, your IP address, your browser and ad identifiers, so Meta can count the signup once and match it to the ad.",
           "Google, only if you accepted Analytics or Advertising: Google Analytics and the Google Ads tag receive page views and the event generate_lead.",
           "Our website hosting provider processes requests to the site on our behalf.",

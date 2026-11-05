@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useId, useState } from "react";
+import { FormEvent, useEffect, useId, useState } from "react";
 import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -29,6 +29,17 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
   const [email, setEmail] = useState("");
   const [doors, setDoors] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  // Coming back with the Back button restores this page from the cache mid-redirect
+  useEffect(() => {
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted) return;
+      setIsSubmitted(false);
+      setIsSubmitting(false);
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,6 +72,8 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
         headers: {
           "Content-Type": "application/json",
         },
+        // A slow lead record must not keep the visitor from the app
+        signal: AbortSignal.timeout(6000),
         body: JSON.stringify({
           email: trimmedEmail,
           language: lang,

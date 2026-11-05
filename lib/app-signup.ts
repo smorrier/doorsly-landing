@@ -2,8 +2,8 @@ import { hasConsent } from "@/lib/consent/client";
 import { APP_URL } from "@/lib/site";
 import type { Attribution } from "@/lib/waitlist";
 
-/** The ad tags the app's signup page reads. gclid and utm_term stay on this site. */
-const FORWARDED_ATTRIBUTION = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "fbclid"] as const;
+/** Campaign tags the app's signup page reads. gclid and utm_term stay on this site. */
+const FORWARDED_ATTRIBUTION = ["utm_source", "utm_medium", "utm_campaign", "utm_content"] as const;
 
 function cookieValue(name: string): string | undefined {
   const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
@@ -12,8 +12,8 @@ function cookieValue(name: string): string | undefined {
 
 /**
  * The app's signup page, with the email already typed and where the visitor came from. The
- * Meta cookies (`fbp`, `fbc`) and the Lead's event id travel only with Advertising consent
- * (`ac=1`); the app ignores them otherwise. The app emails the visitor a link, so this is the
+ * Meta identifiers (`fbclid`, `fbp`, `fbc`) and the Lead's event id travel only with Advertising
+ * consent (`ac=1`). The app emails the visitor a link, so this is the
  * first of its steps.
  */
 export function appSignupUrl(input: { email: string; attribution: Attribution; eventId?: string }): string {
@@ -24,6 +24,8 @@ export function appSignupUrl(input: { email: string; attribution: Attribution; e
     if (value) url.searchParams.set(key, value);
   }
   if (hasConsent("advertising")) {
+    // fbclid is an advertising identifier, so it travels only with consent
+    if (input.attribution.fbclid) url.searchParams.set("fbclid", input.attribution.fbclid);
     url.searchParams.set("ac", "1");
     if (input.eventId) url.searchParams.set("eid", input.eventId);
     const fbp = cookieValue("_fbp");

@@ -37,7 +37,7 @@ See `.env.example`. `NEXT_PUBLIC_*` values are inlined at build time, so redeplo
 | `NEXT_PUBLIC_GOOGLE_ADS_ID` | Google Ads tag (optional; without it only GA4 runs) |
 | `LOOPS_API_KEY` | Creates or updates a Loops contact per signup (secret) |
 | `SLACK_WEBHOOK_URL` | Slack notification per signup (secret) |
-| `NEXT_PUBLIC_APP_URL` | The Doorsly app, where the form sends visitors to create an account. Default `https://app.getdoorsly.com` |
+| `NEXT_PUBLIC_APP_URL` | Origin (no path) of the Doorsly app, where the form sends visitors to create an account. Default `https://app.getdoorsly.com`; a malformed or non-https value falls back to it |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | Address behind the footer's Contact link (optional; without it the link is hidden) |
 | `NEXT_PUBLIC_PRIVACY_OFFICER_NAME`, `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` | Person in charge of personal information, shown in the privacy policy. Required: `next build` fails without them |
 
@@ -51,8 +51,10 @@ least one of `LOOPS_API_KEY` and `SLACK_WEBHOOK_URL`.
 - Set `NEXT_PUBLIC_PRIVACY_OFFICER_NAME` and `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` (the person in
   charge of personal information; the policy shows both). The build fails if either is missing.
 - Read the policy's retention periods (`privacy.en.ts`, section "How long we keep it") and
-  make them true: waitlist data deleted within 24 months; Google Analytics data retention set to
+  make them true: signup contacts (Loops) and Slack notifications deleted within 24 months; Google Analytics data retention set to
   14 months (GA4 > Admin > Data collection and modification > Data retention).
+- In Loops, check that no automation sends a "you're on the list" or welcome email to every new contact: the
+  form now creates a contact for each visitor who starts a signup, finished or not.
 - In Loops, create these contact properties (type: string) before the first signup:
   `language`, `doors`, `utmSource`, `utmMedium`, `utmCampaign`, `utmContent`, `utmTerm`. If one is
   missing, Loops rejects the full contact and the route saves just email, source and language
@@ -111,6 +113,9 @@ The Lead stays the campaign's optimisation event.
 
 ## Waitlist route
 
+The route and its `source: "waitlist"` and `content_name: "waitlist"` values keep their old names on purpose, so
+Loops contacts and Meta reporting stay continuous. They now record the start of a signup.
+
 `POST /api/waitlist` takes `email`, `language`, optional `doors` (`1-4`, `5-20`, `21-50`, `50+`),
 the ad parameters, `eventId`, `pageUrl` and the hidden `website` honeypot.
 
@@ -128,7 +133,9 @@ the ad parameters, `eventId`, `pageUrl` and the hidden `website` honeypot.
    `googletagmanager.com`, `google-analytics.com` or `doubleclick.net`, and only `dl_consent` may be
    set after you answer. "Reject all" must keep it that way.
 2. **Meta Test events.** Set `META_CAPI_TEST_EVENT_CODE`, redeploy, open Events Manager > Test events,
-   enter the site URL, accept Advertising, then join the waitlist. Expect
+   enter the site URL, accept Advertising, then submit the email form (it redirects to the app's
+   signup page; check the address carries `email`, the `utm_*` tags and, with Advertising accepted,
+   `ac=1`, `eid`, `fbclid`, `fbp`, `fbc`; with it declined only `email` and the `utm_*` tags). Expect
    `PageView` and `Lead` from Browser, and `Lead` from Server, marked as deduplicated
    (one `Lead`, "Browser and Server"). Check the match-quality fields (email, IP, user agent,
    `fbp`/`fbc`). Then remove `META_CAPI_TEST_EVENT_CODE` and redeploy.

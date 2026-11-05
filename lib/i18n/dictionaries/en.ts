@@ -226,7 +226,7 @@ export const en: Dictionary = {
     },
     submit: "Get started",
     privacyNote:
-      "By continuing, you agree that Doorsly may email you about your account and product news. Unsubscribe from the news any time.",
+      "We’ll email you a link to create your Doorsly account, and emails about your account. We don’t send marketing emails unless you ask for them.",
     privacyLinkLabel: "Privacy policy",
     errorInvalidEmail: "Please enter a valid email address.",
     successTitle: "Taking you to Doorsly",
