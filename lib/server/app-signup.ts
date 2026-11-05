@@ -47,7 +47,7 @@ export async function requestAppSignup(
       }),
     },
     // Only Meta's server event uses these
-    ...(consent && { ipAddress: ip, userAgent: request.headers.get("user-agent")?.slice(0, 500) }),
+    ...(consent && { ipAddress: ip?.slice(0, 100), userAgent: request.headers.get("user-agent")?.slice(0, 500) }),
   };
 
   try {
