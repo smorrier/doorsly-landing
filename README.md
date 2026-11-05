@@ -2,8 +2,8 @@
 
 getdoorsly.com: Next.js 14 (App Router), Tailwind, framer-motion. Property management software
 for small-to-medium Canadian landlords, covering the whole app. English only for now. The one call to
-action is the email form: it records the lead, then sends the visitor to the app's signup page, where
-they get an emailed link and set a password. There is no waiting list or approval.
+action is the email form: it records the lead and has the app email the visitor a link to create their
+account, where they set a password. There is no waiting list or approval.
 
 ```bash
 npm install
@@ -37,7 +37,8 @@ See `.env.example`. `NEXT_PUBLIC_*` values are inlined at build time, so redeplo
 | `NEXT_PUBLIC_GOOGLE_ADS_ID` | Google Ads tag (optional; without it only GA4 runs) |
 | `LOOPS_API_KEY` | Creates or updates a Loops contact per signup (secret) |
 | `SLACK_WEBHOOK_URL` | Slack notification per signup (secret) |
-| `NEXT_PUBLIC_APP_URL` | Origin (no path) of the Doorsly app, where the form sends visitors to create an account. Default `https://app.getdoorsly.com`; a malformed or non-https value falls back to it |
+| `BACKEND_API_URL` | Doorsly backend (for example `https://api.getdoorsly.com`) that emails the signup link |
+| `FRONTEND_SERVICE_API_KEY` | Service key for that backend (secret; the same value as the backend's `FRONTEND_SERVICE_API_KEY`) |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | Address behind the footer's Contact link (optional; without it the link is hidden) |
 | `NEXT_PUBLIC_PRIVACY_OFFICER_NAME`, `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` | Person in charge of personal information, shown in the privacy policy. Required: `next build` fails without them |
 
@@ -104,14 +105,17 @@ with the signup, so no attribution cookie is used. The language switcher keeps t
 For Google Ads, turn on auto-tagging (adds `gclid`); UTMs are optional, for example
 `utm_source=google&utm_medium=cpc&utm_campaign={campaignid}`.
 
-## Hand-off to the app
+## Signup link
 
-After the lead is recorded (best effort: a failure doesn't stop the visitor), the form waits 400 ms for
-the Pixel and then opens `{NEXT_PUBLIC_APP_URL}/signup` with `email`, the ad tags (`utm_source`,
-`utm_medium`, `utm_campaign`, `utm_content`) and, only when Advertising is accepted, `ac=1`, `fbclid`,
-`eid` (the Lead's event id), `fbp` and `fbc` ([lib/app-signup.ts](lib/app-signup.ts)). The app stores
-them on its pending signup and sends `CompleteRegistration` to Meta when the person sets a password.
-The Lead stays the campaign's optimisation event.
+`POST /api/waitlist` also asks the Doorsly backend (`POST {BACKEND_API_URL}/auth/signups`, service key,
+[lib/server/app-signup.ts](lib/server/app-signup.ts)) to record the signup and email the visitor a link to
+create their account. The page stays put and shows "Check your email". The backend owns accounts, expiry
+(48 hours), the per-address limits and the reset email for people who already have an account; this site
+only forwards the email, language and campaign tags. With Advertising accepted it also forwards `fbclid`,
+`fbp`, `fbc`, the Lead's event id, the IP and the user agent, which the backend uses for its
+`CompleteRegistration` event. The request decides the response: if it fails the form shows an error and
+no `Lead` is sent. Slack and Loops are best-effort records of the lead. The Lead stays the campaign's
+optimisation event.
 
 ## Waitlist route
 
@@ -121,14 +125,12 @@ Loops contacts and Meta reporting stay continuous. They now record the start of 
 `POST /api/waitlist` takes `email`, `language`, optional `doors` (`1-4`, `5-20`, `21-50`, `50+`),
 the ad parameters, `eventId`, `pageUrl` and the hidden `website` honeypot.
 
-- Posts to Slack and upserts the Loops contact (`PUT https://app.loops.so/api/v1/contacts/update`,
-  `source: "waitlist"`). The signup counts as saved if either succeeds; only both failing returns 502.
+- Asks the backend to email the signup link (see above); only that failing returns 502. In parallel it posts
+  to Slack and upserts the Loops contact (`PUT https://app.loops.so/api/v1/contacts/update`,
+  `source: "waitlist"`), both optional and best effort.
 - Limit: 8 requests per IP per 10 minutes (`429`), counted in memory per server instance. On
   serverless hosting each warm instance counts separately; add a firewall rule if you need a
   hard cap.
-- The browser gives the route 6 s. If that passes while the server is still working, the server may send its
-  Conversions API `Lead` anyway; the form then also sends the Pixel `Lead` with the same `event_id`, so Meta
-  still counts it once.
 - A filled honeypot gets a normal success response and nothing is stored or tracked.
 
 ## After deploying
@@ -138,9 +140,8 @@ the ad parameters, `eventId`, `pageUrl` and the hidden `website` honeypot.
    `googletagmanager.com`, `google-analytics.com` or `doubleclick.net`, and only `dl_consent` may be
    set after you answer. "Reject all" must keep it that way.
 2. **Meta Test events.** Set `META_CAPI_TEST_EVENT_CODE`, redeploy, open Events Manager > Test events,
-   enter the site URL, accept Advertising, then submit the email form (it redirects to the app's
-   signup page; check the address carries `email`, the `utm_*` tags and, with Advertising accepted,
-   `ac=1`, `eid`, `fbclid`, `fbp`, `fbc`; with it declined only `email` and the `utm_*` tags). Expect
+   enter the site URL, accept Advertising, then submit the email form (the page shows "Check your email"
+   and the link arrives in your inbox). Expect
    `PageView` and `Lead` from Browser, and `Lead` from Server, marked as deduplicated
    (one `Lead`, "Browser and Server"). Check the match-quality fields (email, IP, user agent,
    `fbp`/`fbc`). Then remove `META_CAPI_TEST_EVENT_CODE` and redeploy.

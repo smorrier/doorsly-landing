@@ -13,7 +13,7 @@ export const privacyEn: PrivacyDoc = {
       id: "about",
       title: "Who we are",
       blocks: [
-        "Doorsly is property management software for landlords with 1 to 50 doors. This website, getdoorsly.com, presents Doorsly and takes you to the Doorsly app to create an account. This policy covers the website only; the app has its own.",
+        "Doorsly is property management software for landlords with 1 to 50 doors. This website, getdoorsly.com, presents Doorsly and lets you request a link to create an account in the Doorsly app. This policy covers the website only; the app has its own.",
         "The person in charge of protecting personal information is {officerName}, reachable at {officerEmail}.",
         "This policy follows Québec’s Act respecting the protection of personal information in the private sector (Law 25) and Canada’s PIPEDA. It covers this website only.",
       ],
@@ -78,7 +78,7 @@ export const privacyEn: PrivacyDoc = {
         [
           "Slack: each signup start (email, doors range, language and campaign parameters) is posted to our private team channel.",
           "Loops: our email service provider stores your contact and sends our emails.",
-          "The Doorsly app (app.getdoorsly.com, run by us): when you continue, your browser opens the app’s sign-up page, and the page address carries your email address and the campaign parameters. If you accepted Advertising, it also carries your Meta browser identifiers and the id of your signup event, so the app can tell Meta your account was created. The app has its own privacy policy.",
+          "The Doorsly app (run by us): when you submit the form, our server sends your email address, your language and the campaign parameters to the app’s server, which emails you the link to create your account. If you accepted Advertising, it also receives your Meta browser identifiers, your IP address and browser details, and the id of your signup event, so it can tell Meta your account was created. The app has its own privacy policy.",
           "Meta (Facebook and Instagram), only if you accepted Advertising: the Meta Pixel in your browser and our server send events such as page view and signup. For a signup, our server also sends a hashed (one-way encrypted) email address, your IP address, your browser and ad identifiers, so Meta can count the signup once and match it to the ad.",
           "Google, only if you accepted Analytics or Advertising: Google Analytics and the Google Ads tag receive page views and the event generate_lead.",
           "Our website hosting provider processes requests to the site on our behalf.",

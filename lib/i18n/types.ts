@@ -92,8 +92,13 @@ export type Dictionary = {
     privacyNote: string;
     privacyLinkLabel: string;
     errorInvalidEmail: string;
+    errorGeneric: string;
+    errorRateLimited: string;
+    /** `{email}` is replaced with the address the link went to. */
     successTitle: string;
     successBody: string;
+    successHint: string;
+    successRetry: string;
   };
   footer: {
     tagline: string;

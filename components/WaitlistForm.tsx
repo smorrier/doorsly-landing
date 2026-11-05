@@ -1,13 +1,12 @@
 "use client";
 
-import { FormEvent, useEffect, useId, useState } from "react";
+import { FormEvent, useId, useState } from "react";
 import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trackLead } from "@/lib/analytics/events";
-import { appSignupUrl } from "@/lib/app-signup";
 import { newMetaEventId } from "@/lib/analytics/meta";
 import type { Lang } from "@/lib/i18n/config";
 import { DOORS_VALUES, type Dictionary } from "@/lib/i18n/types";
@@ -27,19 +26,10 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
+  /** The address the link went to, shown in the confirmation. */
+  const [sentTo, setSentTo] = useState("");
   const [doors, setDoors] = useState("");
   const [error, setError] = useState<string | null>(null);
-
-  // Coming back with the Back button restores this page from the cache mid-redirect
-  useEffect(() => {
-    const onPageShow = (event: PageTransitionEvent) => {
-      if (!event.persisted) return;
-      setIsSubmitted(false);
-      setIsSubmitting(false);
-    };
-    window.addEventListener("pageshow", onPageShow);
-    return () => window.removeEventListener("pageshow", onPageShow);
-  }, []);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -54,6 +44,7 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
     // Honeypot: a filled hidden field means a bot. Look like a success, send and track nothing.
     const honeypot = new FormData(event.currentTarget).get("website");
     if (typeof honeypot === "string" && honeypot.trim()) {
+      setSentTo(trimmedEmail);
       setIsSubmitted(true);
       return;
     }
@@ -61,46 +52,41 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
     setIsSubmitting(true);
     // Shared with the server so Meta counts the Pixel Lead and the Conversions API Lead once.
     const eventId = newMetaEventId();
-    // Read from the address bar now, so no attribution cookie is needed.
-    const attribution = attributionFromSearch(window.location.search);
-    let leadEventId: string | undefined;
 
-    // Recording the lead is best effort: the visitor goes on to create an account either way.
     try {
       const response = await fetch("/api/waitlist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        // A slow lead record must not keep the visitor from the app
-        signal: AbortSignal.timeout(6000),
+        // The server waits for the backend to send the link, then for Meta
+        signal: AbortSignal.timeout(20000),
         body: JSON.stringify({
           email: trimmedEmail,
           language: lang,
           doors: isDoorsValue(doors) ? doors : undefined,
-          ...attribution,
+          // Read from the address bar now, so no attribution cookie is needed.
+          ...attributionFromSearch(window.location.search),
           eventId,
           pageUrl: window.location.href.split("#")[0],
         }),
       });
-      if (response.ok) {
-        trackLead(eventId, lang);
-        leadEventId = eventId;
-      }
-    } catch (error) {
-      // Carry on to the app. If the browser gave up waiting, the server may still send its
-      // Lead, so send the Pixel's too: the shared event id lets Meta count it once.
-      if (error instanceof DOMException && (error.name === "TimeoutError" || error.name === "AbortError")) {
-        trackLead(eventId, lang);
-        leadEventId = eventId;
-      }
-    }
 
-    setIsSubmitted(true);
-    // A beat for the Pixel to send the Lead before the page unloads
-    window.setTimeout(() => {
-      window.location.assign(appSignupUrl({ email: trimmedEmail, attribution, eventId: leadEventId }));
-    }, 400);
+      if (!response.ok) {
+        setError(response.status === 429 ? dict.errorRateLimited : dict.errorGeneric);
+        return;
+      }
+
+      setSentTo(trimmedEmail);
+      setIsSubmitted(true);
+      setEmail("");
+      setDoors("");
+      trackLead(eventId, lang);
+    } catch {
+      setError(dict.errorGeneric);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Two copies, one shown per breakpoint, so the tab order matches the layout: from sm up the
@@ -148,9 +134,17 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
             >
               {dict.successTitle}
             </h3>
-            <p className="text-sm text-muted-foreground">
-              {dict.successBody}
+            <p className="text-sm text-foreground">
+              {dict.successBody.replace("{email}", sentTo)}
             </p>
+            <p className="text-sm text-muted-foreground">{dict.successHint}</p>
+            <button
+              type="button"
+              onClick={() => setIsSubmitted(false)}
+              className="text-sm text-primary underline underline-offset-4 hover:no-underline"
+            >
+              {dict.successRetry}
+            </button>
           </motion.div>
         ) : (
           <motion.div
