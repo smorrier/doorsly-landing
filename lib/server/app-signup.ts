@@ -35,17 +35,19 @@ export async function requestAppSignup(
       utmMedium: attribution.utm_medium,
       utmCampaign: attribution.utm_campaign,
       utmContent: attribution.utm_content,
-      pageUrl: signup.pageUrl,
       ...(consent && {
         fbclid: attribution.fbclid,
-        fbp: request.cookies.get("_fbp")?.value,
-        fbc: request.cookies.get("_fbc")?.value,
+        // Cookies are the visitor's to set: cap them to the backend's limit so one can't fail a signup
+        fbp: request.cookies.get("_fbp")?.value.slice(0, 200),
+        fbc: request.cookies.get("_fbc")?.value.slice(0, 200),
         eventId: signup.eventId,
+        // The address bar can carry fbclid and gclid, so the page address is advertising data too
+        pageUrl: signup.pageUrl,
         advertisingConsent: true,
       }),
     },
-    ipAddress: ip,
-    userAgent: request.headers.get("user-agent")?.slice(0, 500),
+    // Only Meta's server event uses these
+    ...(consent && { ipAddress: ip, userAgent: request.headers.get("user-agent")?.slice(0, 500) }),
   };
 
   try {

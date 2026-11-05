@@ -51,7 +51,8 @@ export async function POST(request: NextRequest) {
   // Bots fill the hidden field. Answer like a success so they learn nothing, and store nothing.
   if (signup.honeypot) return NextResponse.json({ ok: true }, { status: 200 });
 
-  // Independent: a slow Slack or Loops must not hold up, or fail, the link email.
+  // Independent: a failing Slack or Loops doesn't fail the signup, but they are awaited because
+  // serverless hosts can stop work that outlives the response (a slow one delays the answer).
   const [linkSent] = await Promise.all([
     requestAppSignup(signup, request, ip),
     slackWebhookUrl ? notifySlack(slackWebhookUrl, signup) : Promise.resolve(false),

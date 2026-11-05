@@ -135,7 +135,7 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
               {dict.successTitle}
             </h3>
             <p className="text-sm text-foreground">
-              {dict.successBody.replace("{email}", sentTo)}
+              {dict.successBody.replace("{email}", () => sentTo)}
             </p>
             <p className="text-sm text-muted-foreground">{dict.successHint}</p>
             <button
