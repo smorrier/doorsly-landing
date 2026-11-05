@@ -54,7 +54,9 @@ least one of `LOOPS_API_KEY` and `SLACK_WEBHOOK_URL`.
   make them true: signup contacts (Loops) and Slack notifications deleted within 24 months; Google Analytics data retention set to
   14 months (GA4 > Admin > Data collection and modification > Data retention).
 - In Loops, check that no automation sends a "you're on the list" or welcome email to every new contact: the
-  form now creates a contact for each visitor who starts a signup, finished or not.
+  form now creates a contact for each visitor who starts a signup, finished or not. Contacts are
+  subscribed by default, so also make sure no Loops campaign or audience targets "all subscribed"
+  contacts: the policy promises no marketing email unless people ask for it.
 - In Loops, create these contact properties (type: string) before the first signup:
   `language`, `doors`, `utmSource`, `utmMedium`, `utmCampaign`, `utmContent`, `utmTerm`. If one is
   missing, Loops rejects the full contact and the route saves just email, source and language
@@ -106,7 +108,7 @@ For Google Ads, turn on auto-tagging (adds `gclid`); UTMs are optional, for exam
 
 After the lead is recorded (best effort: a failure doesn't stop the visitor), the form waits 400 ms for
 the Pixel and then opens `{NEXT_PUBLIC_APP_URL}/signup` with `email`, the ad tags (`utm_source`,
-`utm_medium`, `utm_campaign`, `utm_content`, `fbclid`) and, only when Advertising is accepted, `ac=1`,
+`utm_medium`, `utm_campaign`, `utm_content`) and, only when Advertising is accepted, `ac=1`, `fbclid`,
 `eid` (the Lead's event id), `fbp` and `fbc` ([lib/app-signup.ts](lib/app-signup.ts)). The app stores
 them on its pending signup and sends `CompleteRegistration` to Meta when the person sets a password.
 The Lead stays the campaign's optimisation event.
@@ -124,6 +126,9 @@ the ad parameters, `eventId`, `pageUrl` and the hidden `website` honeypot.
 - Limit: 8 requests per IP per 10 minutes (`429`), counted in memory per server instance. On
   serverless hosting each warm instance counts separately; add a firewall rule if you need a
   hard cap.
+- The browser gives the route 6 s. If that passes while the server is still working, the server may send its
+  Conversions API `Lead` anyway; the form then also sends the Pixel `Lead` with the same `event_id`, so Meta
+  still counts it once.
 - A filled honeypot gets a normal success response and nothing is stored or tracked.
 
 ## After deploying

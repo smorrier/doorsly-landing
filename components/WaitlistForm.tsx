@@ -87,8 +87,13 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
         trackLead(eventId, lang);
         leadEventId = eventId;
       }
-    } catch {
-      // Carry on to the app
+    } catch (error) {
+      // Carry on to the app. If the browser gave up waiting, the server may still send its
+      // Lead, so send the Pixel's too: the shared event id lets Meta count it once.
+      if (error instanceof DOMException && (error.name === "TimeoutError" || error.name === "AbortError")) {
+        trackLead(eventId, lang);
+        leadEventId = eventId;
+      }
     }
 
     setIsSubmitted(true);

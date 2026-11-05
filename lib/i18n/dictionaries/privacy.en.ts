@@ -50,7 +50,7 @@ export const privacyEn: PrivacyDoc = {
       blocks: [
         "Analytics and advertising cookies are off until you choose. The banner offers two separate choices, Analytics and Advertising, and Reject all is as easy as Accept all. Until you opt in, nothing is loaded from Google or Meta and nothing is sent to them.",
         "You can change your choice at any time with the “Cookie preferences” link at the bottom of every page: {cookiePrefs}. Withdrawing stops the trackers and removes their cookies from this site.",
-        "By submitting the sign-up form, you ask us to email you the link to create your account, and we will email you about your account. We send marketing emails only if you separately ask for them. Every such email will include a way to unsubscribe, and you can also write to us at {officerEmail}. Every email will include a way to unsubscribe, and you can also write to us at {officerEmail}.",
+        "By submitting the sign-up form, you ask us to email you the link to create your account, and we will email you about your account. We send marketing emails only if you separately ask for them. Every such email will include a way to unsubscribe, and you can also write to us at {officerEmail}.",
       ],
     },
     {
@@ -91,7 +91,7 @@ export const privacyEn: PrivacyDoc = {
       title: "How long we keep it",
       blocks: [
         [
-          "Contact (Loops) and Slack notification: until you unsubscribe or ask us to delete them, and no more than 24 months after you joined, unless you start using Doorsly.",
+          "Contact (Loops) and Slack notification: until you unsubscribe or ask us to delete them, and no more than 24 months after you started signing up, unless you start using Doorsly.",
           "Cookies: for the durations in the table above. Your consent choice is kept for 13 months, then we ask again.",
           "Google Analytics data: 14 months.",
           "Data held by Meta and Google follows their own retention policies.",
