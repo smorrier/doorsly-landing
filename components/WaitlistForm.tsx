@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trackLead } from "@/lib/analytics/events";
+import { appSignupUrl } from "@/lib/app-signup";
 import { newMetaEventId } from "@/lib/analytics/meta";
 import type { Lang } from "@/lib/i18n/config";
 import { DOORS_VALUES, type Dictionary } from "@/lib/i18n/types";
@@ -49,7 +50,11 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
     setIsSubmitting(true);
     // Shared with the server so Meta counts the Pixel Lead and the Conversions API Lead once.
     const eventId = newMetaEventId();
+    // Read from the address bar now, so no attribution cookie is needed.
+    const attribution = attributionFromSearch(window.location.search);
+    let leadEventId: string | undefined;
 
+    // Recording the lead is best effort: the visitor goes on to create an account either way.
     try {
       const response = await fetch("/api/waitlist", {
         method: "POST",
@@ -60,29 +65,24 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
           email: trimmedEmail,
           language: lang,
           doors: isDoorsValue(doors) ? doors : undefined,
-          // Read from the address bar now, so no attribution cookie is needed.
-          ...attributionFromSearch(window.location.search),
+          ...attribution,
           eventId,
           pageUrl: window.location.href.split("#")[0],
         }),
       });
-
-      if (!response.ok) {
-        setError(
-          response.status === 429 ? dict.errorRateLimited : dict.errorGeneric,
-        );
-        return;
+      if (response.ok) {
+        trackLead(eventId, lang);
+        leadEventId = eventId;
       }
-
-      setIsSubmitted(true);
-      setEmail("");
-      setDoors("");
-      trackLead(eventId, lang);
     } catch {
-      setError(dict.errorGeneric);
-    } finally {
-      setIsSubmitting(false);
+      // Carry on to the app
     }
+
+    setIsSubmitted(true);
+    // A beat for the Pixel to send the Lead before the page unloads
+    window.setTimeout(() => {
+      window.location.assign(appSignupUrl({ email: trimmedEmail, attribution, eventId: leadEventId }));
+    }, 400);
   };
 
   // Two copies, one shown per breakpoint, so the tab order matches the layout: from sm up the

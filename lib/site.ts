@@ -2,6 +2,12 @@ import type { Lang } from "@/lib/i18n/config";
 
 export const SITE_URL = "https://getdoorsly.com";
 
+/** The Doorsly app, where accounts are created. Set NEXT_PUBLIC_APP_URL to change it. */
+export const APP_URL = (process.env.NEXT_PUBLIC_APP_URL?.trim() || "https://app.getdoorsly.com").replace(
+  /\/+$/,
+  "",
+);
+
 /**
  * Person in charge of personal information (Québec Law 25), shown in the privacy policy. Set
  * NEXT_PUBLIC_PRIVACY_OFFICER_NAME and NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL; a production build

@@ -77,6 +77,7 @@ export type Dictionary = {
     notTitle: string;
     notBody: string;
   };
+  /** "How it works" steps (was the closed beta explainer). */
   beta: { title: string; steps: { title: string; body: string }[] };
   faq: { title: string; items: { question: string; answer: string }[] };
   waitlist: {
@@ -91,8 +92,6 @@ export type Dictionary = {
     privacyNote: string;
     privacyLinkLabel: string;
     errorInvalidEmail: string;
-    errorGeneric: string;
-    errorRateLimited: string;
     successTitle: string;
     successBody: string;
   };

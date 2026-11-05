@@ -6,22 +6,22 @@ export const en: Dictionary = {
   meta: {
     title: "Doorsly: property management software for Canadian landlords",
     description:
-      "Rent, e-transfers, leases, work orders, documents and tenant messages in one place, built for small Canadian landlords. Join the Doorsly closed beta waitlist.",
+      "Rent, e-transfers, leases, work orders, documents and tenant messages in one place, built for small Canadian landlords. Create your account in minutes.",
     ogLocale: "en_CA",
     ogImageAlt: "Doorsly: your rentals, all in one place, for Canadian landlords",
   },
   og: {
     headline: "Your rentals, all in one place",
-    subline: "For small-to-medium Canadian landlords. Join the closed beta waitlist.",
+    subline: "For small-to-medium Canadian landlords. Create your account today.",
   },
-  header: { cta: "Join the waitlist", homeAria: "Doorsly home" },
+  header: { cta: "Get started", homeAria: "Doorsly home" },
   hero: {
-    badge: "Closed beta",
+    badge: "Now open",
     titleLead: "Your rentals,",
     titleAccent: "all in one place",
     subtitle: "Rent, tenants, leases, work orders, documents and your inbox, in one place.",
     betaNote:
-      "We’re letting in a small number of landlords at a time. We’ll email you when there’s a spot.",
+      "No waiting list. Enter your email and we’ll send you a link to create your account.",
     learnMore: "Learn more about Doorsly",
   },
   pain: {
@@ -160,19 +160,19 @@ export const en: Dictionary = {
       "Large property management companies, or commercial portfolios. Doorsly is made for residential landlords who manage their own units.",
   },
   beta: {
-    title: "How the closed beta works",
+    title: "How it works",
     steps: [
       {
-        title: "Join the waitlist.",
-        body: "Leave your email, and tell us roughly how many doors you manage if you like.",
+        title: "Enter your email.",
+        body: "Tell us roughly how many doors you manage if you like.",
       },
       {
-        title: "Get invited.",
-        body: "When there’s room, we’ll email you an invitation.",
+        title: "Open the link we email you.",
+        body: "It confirms your email, so there’s no code to copy.",
       },
       {
-        title: "Create your account.",
-        body: "When your invitation arrives, you can sign up and set up your properties.",
+        title: "Set a password and get started.",
+        body: "Name your organization, then add your properties.",
       },
     ],
   },
@@ -182,7 +182,7 @@ export const en: Dictionary = {
       {
         question: "What is Doorsly?",
         answer:
-          "Doorsly is property management software for small-to-medium Canadian landlords. It keeps rent, tenants, leases, work orders, documents and email and text conversations in one place. It is currently in closed beta, so access is by invitation.",
+          "Doorsly is property management software for small-to-medium Canadian landlords. It keeps rent, tenants, leases, work orders, documents and email and text conversations in one place. You can create an account today.",
       },
       {
         question: "How does Doorsly handle Interac e-transfers?",
@@ -212,8 +212,8 @@ export const en: Dictionary = {
     ],
   },
   waitlist: {
-    title: "Join the Doorsly waitlist",
-    body: "Closed beta. We’re letting in a small number of landlords at a time. We’ll email you when there’s a spot.",
+    title: "Get started with Doorsly",
+    body: "Enter your email and we’ll send you a link to create your account. No waiting list.",
     emailPlaceholder: "you@example.com",
     emailLabel: "Email address",
     doorsLabel: "How many doors do you manage? (optional)",
@@ -224,15 +224,13 @@ export const en: Dictionary = {
       "21-50": "21 to 50 doors",
       "50+": "More than 50 doors",
     },
-    submit: "Join the waitlist",
+    submit: "Get started",
     privacyNote:
-      "By joining, you agree that Doorsly may email you about the closed beta and launch. Unsubscribe any time.",
+      "By continuing, you agree that Doorsly may email you about your account and product news. Unsubscribe from the news any time.",
     privacyLinkLabel: "Privacy policy",
     errorInvalidEmail: "Please enter a valid email address.",
-    errorGeneric: "Sorry, we couldn’t add you right now. Please try again.",
-    errorRateLimited: "Too many attempts. Please try again in a few minutes.",
-    successTitle: "You’re on the list",
-    successBody: "We’ll email you as soon as we’re ready for you.",
+    successTitle: "Taking you to Doorsly",
+    successBody: "One moment while we open your account setup.",
   },
   footer: {
     tagline: "Your rentals, all in one place.",
@@ -263,7 +261,7 @@ export const en: Dictionary = {
       analytics: {
         title: "Analytics",
         description:
-          "Google Analytics measures visits, waitlist signups and taps on the text-message link.",
+          "Google Analytics measures visits, signups started and taps on the text-message link.",
       },
       advertising: {
         title: "Advertising",

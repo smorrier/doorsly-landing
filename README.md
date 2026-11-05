@@ -2,7 +2,8 @@
 
 getdoorsly.com: Next.js 14 (App Router), Tailwind, framer-motion. Property management software
 for small-to-medium Canadian landlords, covering the whole app. English only for now. The one call to
-action is the waitlist.
+action is the email form: it records the lead, then sends the visitor to the app's signup page, where
+they get an emailed link and set a password. There is no waiting list or approval.
 
 ```bash
 npm install
@@ -36,6 +37,7 @@ See `.env.example`. `NEXT_PUBLIC_*` values are inlined at build time, so redeplo
 | `NEXT_PUBLIC_GOOGLE_ADS_ID` | Google Ads tag (optional; without it only GA4 runs) |
 | `LOOPS_API_KEY` | Creates or updates a Loops contact per signup (secret) |
 | `SLACK_WEBHOOK_URL` | Slack notification per signup (secret) |
+| `NEXT_PUBLIC_APP_URL` | The Doorsly app, where the form sends visitors to create an account. Default `https://app.getdoorsly.com` |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | Address behind the footer's Contact link (optional; without it the link is hidden) |
 | `NEXT_PUBLIC_PRIVACY_OFFICER_NAME`, `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` | Person in charge of personal information, shown in the privacy policy. Required: `next build` fails without them |
 
@@ -77,7 +79,7 @@ Consent is opt-in, with separate Analytics and Advertising choices, saved in the
 | Event | Fired when | Meta Pixel (browser) | Meta CAPI (server) | Google (gtag) |
 |---|---|---|---|---|
 | Page view | each page load | `PageView` | | GA4 automatic `page_view` |
-| Waitlist signup succeeds | `/api/waitlist` returns OK | `Lead` + `eventID` | `Lead`, same `event_id` | `generate_lead` (`lead_source`, `language`) |
+| Email form submitted (the lead) | `/api/waitlist` returns OK | `Lead` + `eventID` | `Lead`, same `event_id` | `generate_lead` (`lead_source`, `language`) |
 
 Meta deduplicates the Pixel and server `Lead` on `event_id` + event name. The server event carries
 a SHA-256 hash of the lowercased email, `fbp`/`fbc` (cookies, or built from `fbclid`), the client
@@ -97,6 +99,15 @@ The form reads `utm_*`, `fbclid` and `gclid` from the address bar at submit time
 with the signup, so no attribution cookie is used. The language switcher keeps the query string.
 For Google Ads, turn on auto-tagging (adds `gclid`); UTMs are optional, for example
 `utm_source=google&utm_medium=cpc&utm_campaign={campaignid}`.
+
+## Hand-off to the app
+
+After the lead is recorded (best effort: a failure doesn't stop the visitor), the form waits 400 ms for
+the Pixel and then opens `{NEXT_PUBLIC_APP_URL}/signup` with `email`, the ad tags (`utm_source`,
+`utm_medium`, `utm_campaign`, `utm_content`, `fbclid`) and, only when Advertising is accepted, `ac=1`,
+`eid` (the Lead's event id), `fbp` and `fbc` ([lib/app-signup.ts](lib/app-signup.ts)). The app stores
+them on its pending signup and sends `CompleteRegistration` to Meta when the person sets a password.
+The Lead stays the campaign's optimisation event.
 
 ## Waitlist route
 
