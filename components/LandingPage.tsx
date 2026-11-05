@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Building2, CheckCircle2, XCircle } from "lucide-react";
 
 import { ConsentPreferencesLink } from "@/components/consent/ConsentPreferencesLink";
+import { HeroPreview } from "@/components/HeroPreview";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { Button } from "@/components/ui/button";
 import type { Lang } from "@/lib/i18n/config";
@@ -68,7 +69,7 @@ export function LandingPage({ lang, dict, short = false }: LandingPageProps) {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
               className={`grid grid-cols-1 items-center gap-10 lg:gap-12 ${
-                dict.hero.media ? "lg:grid-cols-2" : ""
+                dict.hero.media ? "lg:grid-cols-2" : "lg:grid-cols-[1fr_1.05fr]"
               }`}
             >
               <div className="max-w-2xl">
@@ -103,6 +104,11 @@ export function LandingPage({ lang, dict, short = false }: LandingPageProps) {
               {dict.hero.media ? (
                 <div className={`w-full max-w-2xl lg:max-w-none ${isWide(dict.hero.media) ? "hidden md:block" : ""}`}>
                   <Media media={dict.hero.media} priority />
+                </div>
+              ) : null}
+              {!dict.hero.media ? (
+                <div className="hidden lg:block">
+                  <HeroPreview />
                 </div>
               ) : null}
             </div>
