@@ -115,7 +115,9 @@ only forwards the email, language and campaign tags. With Advertising accepted i
 `fbp`, `fbc`, the Lead's event id, the IP and the user agent, which the backend uses for its
 `CompleteRegistration` event. The request decides the response: if it fails the form shows an error and
 no `Lead` is sent. Slack and Loops are best-effort records of the lead. The Lead stays the campaign's
-optimisation event.
+optimisation event. It still counts every submit with Advertising accepted, including people who already
+have an account and repeat submits the backend drops, as the old waitlist did; telling the browser
+otherwise would reveal which addresses have accounts.
 
 ## Waitlist route
 
