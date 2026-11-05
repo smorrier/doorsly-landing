@@ -2,8 +2,8 @@ import { CheckCircle2, Mail } from "lucide-react";
 
 const TOTALS = [
   { label: "Charged", value: "$7,450" },
-  { label: "Collected", value: "$5,900" },
-  { label: "Owed", value: "$1,550", owed: true },
+  { label: "Collected", value: "$5,600" },
+  { label: "Owed", value: "$1,850", owed: true },
 ];
 
 const LEASES = [
@@ -16,14 +16,14 @@ const LEASES = [
 /** Decorative sketch of the rent overview. Sample data, hidden from assistive tech. */
 export function HeroPreview() {
   return (
-    <div aria-hidden="true" className="relative mx-auto w-full max-w-xl pb-10 pl-6 pt-2">
+    <div aria-hidden="true" className="relative mx-auto w-full max-w-xl pb-24 pt-2">
       <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/10 via-blue-100/50 to-transparent" />
 
       <div className="rounded-2xl border bg-white shadow-xl shadow-primary/10">
         <div className="flex items-center justify-between border-b px-5 py-3.5">
           <span className="text-sm font-semibold">Rent</span>
           <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-            This month
+            Active leases
           </span>
         </div>
 
@@ -65,7 +65,7 @@ export function HeroPreview() {
         </ul>
       </div>
 
-      <div className="absolute -bottom-0 -left-0 w-72 rounded-xl border bg-white p-4 shadow-xl shadow-primary/10">
+      <div className="absolute -bottom-0 -left-4 w-72 rounded-xl border bg-white p-4 shadow-xl shadow-primary/10">
         <div className="mb-2 flex items-center gap-2 text-xs font-medium text-muted-foreground">
           <Mail className="h-3.5 w-3.5" />
           Suggested payment
@@ -73,7 +73,7 @@ export function HeroPreview() {
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <div className="truncate text-sm font-semibold">$1,850.00 from D. Whitfield</div>
-            <div className="text-xs text-muted-foreground">Suggested: Dana Whitfield, Unit 1</div>
+            <div className="text-xs text-muted-foreground">Dana Whitfield, Unit 1</div>
           </div>
           <span className="shrink-0 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
             Confirm
