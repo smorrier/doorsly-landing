@@ -77,6 +77,7 @@ export type Dictionary = {
     notTitle: string;
     notBody: string;
   };
+  /** "How it works" steps (was the closed beta explainer). */
   beta: { title: string; steps: { title: string; body: string }[] };
   faq: { title: string; items: { question: string; answer: string }[] };
   waitlist: {
@@ -93,8 +94,11 @@ export type Dictionary = {
     errorInvalidEmail: string;
     errorGeneric: string;
     errorRateLimited: string;
+    /** `{email}` is replaced with the address the link went to. */
     successTitle: string;
     successBody: string;
+    successHint: string;
+    successRetry: string;
   };
   footer: {
     tagline: string;

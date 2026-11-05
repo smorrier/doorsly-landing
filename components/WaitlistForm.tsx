@@ -26,6 +26,8 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
+  /** The address the link went to, shown in the confirmation. */
+  const [sentTo, setSentTo] = useState("");
   const [doors, setDoors] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -42,6 +44,7 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
     // Honeypot: a filled hidden field means a bot. Look like a success, send and track nothing.
     const honeypot = new FormData(event.currentTarget).get("website");
     if (typeof honeypot === "string" && honeypot.trim()) {
+      setSentTo(trimmedEmail);
       setIsSubmitted(true);
       return;
     }
@@ -56,6 +59,8 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
         headers: {
           "Content-Type": "application/json",
         },
+        // The server waits for the backend to send the link, then for Meta
+        signal: AbortSignal.timeout(20000),
         body: JSON.stringify({
           email: trimmedEmail,
           language: lang,
@@ -68,12 +73,11 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
       });
 
       if (!response.ok) {
-        setError(
-          response.status === 429 ? dict.errorRateLimited : dict.errorGeneric,
-        );
+        setError(response.status === 429 ? dict.errorRateLimited : dict.errorGeneric);
         return;
       }
 
+      setSentTo(trimmedEmail);
       setIsSubmitted(true);
       setEmail("");
       setDoors("");
@@ -130,9 +134,17 @@ export function WaitlistForm({ lang, dict, tone = "dark" }: WaitlistFormProps) {
             >
               {dict.successTitle}
             </h3>
-            <p className="text-sm text-muted-foreground">
-              {dict.successBody}
+            <p className="text-sm text-foreground">
+              {dict.successBody.replace("{email}", () => sentTo)}
             </p>
+            <p className="text-sm text-muted-foreground">{dict.successHint}</p>
+            <button
+              type="button"
+              onClick={() => setIsSubmitted(false)}
+              className="text-sm text-primary underline underline-offset-4 hover:no-underline"
+            >
+              {dict.successRetry}
+            </button>
           </motion.div>
         ) : (
           <motion.div

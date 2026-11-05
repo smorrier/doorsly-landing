@@ -13,7 +13,7 @@ export const privacyEn: PrivacyDoc = {
       id: "about",
       title: "Who we are",
       blocks: [
-        "Doorsly is property management software for landlords with 1 to 50 doors. This website, getdoorsly.com, presents Doorsly and lets you join a waitlist.",
+        "Doorsly is property management software for landlords with 1 to 50 doors. This website, getdoorsly.com, presents Doorsly and lets you request a link to create an account in the Doorsly app. This policy covers the website only; the app has its own.",
         "The person in charge of protecting personal information is {officerName}, reachable at {officerEmail}.",
         "This policy follows Québec’s Act respecting the protection of personal information in the private sector (Law 25) and Canada’s PIPEDA. It covers this website only.",
       ],
@@ -24,10 +24,10 @@ export const privacyEn: PrivacyDoc = {
       blocks: [
         "We collect only what is listed here.",
         [
-          "When you join the waitlist: your email address and, if you choose, how many doors you manage (1–4, 5–20, 21–50 or 50+).",
+          "When you enter your email to get started: your email address and, if you choose, how many doors you manage (1–4, 5–20, 21–50 or 50+).",
           "Sent with the signup form: the language of the page and, if you came from an ad, the parameters in the page address (utm_source, utm_medium, utm_campaign, utm_content, utm_term, fbclid and gclid). They tell us which campaign brought you.",
           "Technical details of your request, such as your IP address and browser. We use the IP address briefly to limit repeated submissions and do not store it with your signup.",
-          "If you accept cookies: the identifiers and events described in the Cookies and trackers section, for example that you viewed the page, joined the waitlist or tapped the text-message link.",
+          "If you accept cookies: the identifiers and events described in the Cookies and trackers section, for example that you viewed the page, started signing up or tapped the text-message link.",
         ],
         "We do not ask for your name, payment details or anything else on this website. We do not sell personal information.",
       ],
@@ -37,8 +37,8 @@ export const privacyEn: PrivacyDoc = {
       title: "Why we use it",
       blocks: [
         [
-          "Waitlist details: to email you when Doorsly launches, and to understand which kinds of landlords and which campaigns are generating interest.",
-          "Analytics (only with your consent): to measure how many people visit the page, join the waitlist or tap the text-message link.",
+          "Signup details: to email you the link to create your account and emails about your account, and to understand which kinds of landlords and which campaigns are generating interest.",
+          "Analytics (only with your consent): to measure how many people visit the page, start signing up or tap the text-message link.",
           "Advertising (only with your consent): to measure and improve our ads on Meta (Facebook and Instagram) and Google, including matching a signup to the ad that led to it.",
           "Technical details: to protect the form from abuse.",
         ],
@@ -50,7 +50,7 @@ export const privacyEn: PrivacyDoc = {
       blocks: [
         "Analytics and advertising cookies are off until you choose. The banner offers two separate choices, Analytics and Advertising, and Reject all is as easy as Accept all. Until you opt in, nothing is loaded from Google or Meta and nothing is sent to them.",
         "You can change your choice at any time with the “Cookie preferences” link at the bottom of every page: {cookiePrefs}. Withdrawing stops the trackers and removes their cookies from this site.",
-        "By submitting the waitlist form, you agree that we email you about Doorsly’s launch. Every email will include a way to unsubscribe, and you can also write to us at {officerEmail}.",
+        "By submitting the sign-up form, you ask us to email you the link to create your account, and we will email you about your account. We send marketing emails only if you separately ask for them. Every such email will include a way to unsubscribe, and you can also write to us at {officerEmail}.",
       ],
     },
     {
@@ -76,9 +76,10 @@ export const privacyEn: PrivacyDoc = {
       title: "Who receives your information",
       blocks: [
         [
-          "Slack: each waitlist signup (email, doors range, language and campaign parameters) is posted to our private team channel.",
-          "Loops: our email service provider stores your waitlist contact and sends our launch emails.",
-          "Meta (Facebook and Instagram), only if you accepted Advertising: the Meta Pixel in your browser and our server send events such as page view and waitlist signup. For a signup, our server also sends a hashed (one-way encrypted) email address, your IP address, your browser and ad identifiers, so Meta can count the signup once and match it to the ad.",
+          "Slack: each signup start (email, doors range, language and campaign parameters) is posted to our private team channel.",
+          "Loops: our email service provider stores your contact and sends our emails.",
+          "The Doorsly app (run by us): when you submit the form, our server sends your email address, your language and the campaign parameters to the app’s server, which emails you the link to create your account. If you accepted Advertising, it also receives your Meta browser identifiers, the address of the page you were on, your IP address and browser details, and the id of your signup event, so it can tell Meta your account was created. The app has its own privacy policy.",
+          "Meta (Facebook and Instagram), only if you accepted Advertising: the Meta Pixel in your browser and our server send events such as page view and signup. For a signup, our server also sends a hashed (one-way encrypted) email address, your IP address, your browser and ad identifiers, so Meta can count the signup once and match it to the ad.",
           "Google, only if you accepted Analytics or Advertising: Google Analytics and the Google Ads tag receive page views and the event generate_lead.",
           "Our website hosting provider processes requests to the site on our behalf.",
         ],
@@ -90,7 +91,7 @@ export const privacyEn: PrivacyDoc = {
       title: "How long we keep it",
       blocks: [
         [
-          "Waitlist contact (Loops) and Slack notification: until you unsubscribe or ask us to delete them, and no more than 24 months after you joined, unless you start using Doorsly.",
+          "Contact (Loops) and Slack notification: until you unsubscribe or ask us to delete them, and no more than 24 months after you started signing up, unless you start using Doorsly.",
           "Cookies: for the durations in the table above. Your consent choice is kept for 13 months, then we ask again.",
           "Google Analytics data: 14 months.",
           "Data held by Meta and Google follows their own retention policies.",
@@ -119,7 +120,7 @@ export const privacyEn: PrivacyDoc = {
       id: "security",
       title: "Security",
       blocks: [
-        "Pages are served over HTTPS, access to waitlist details is limited to the people who need it, and email addresses are hashed before they are sent to Meta. If a confidentiality incident presents a risk of serious injury, we will notify you and the Commission d’accès à l’information as the law requires.",
+        "Pages are served over HTTPS, access to signup details is limited to the people who need it, and email addresses are hashed before they are sent to Meta. If a confidentiality incident presents a risk of serious injury, we will notify you and the Commission d’accès à l’information as the law requires.",
       ],
     },
     {

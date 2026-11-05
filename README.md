@@ -2,7 +2,8 @@
 
 getdoorsly.com: Next.js 14 (App Router), Tailwind, framer-motion. Property management software
 for small-to-medium Canadian landlords, covering the whole app. English only for now. The one call to
-action is the waitlist.
+action is the email form: it records the lead and has the app email the visitor a link to create their
+account, where they set a password. There is no waiting list or approval.
 
 ```bash
 npm install
@@ -36,6 +37,8 @@ See `.env.example`. `NEXT_PUBLIC_*` values are inlined at build time, so redeplo
 | `NEXT_PUBLIC_GOOGLE_ADS_ID` | Google Ads tag (optional; without it only GA4 runs) |
 | `LOOPS_API_KEY` | Creates or updates a Loops contact per signup (secret) |
 | `SLACK_WEBHOOK_URL` | Slack notification per signup (secret) |
+| `BACKEND_API_URL` | Doorsly backend (for example `https://api.getdoorsly.com`) that emails the signup link |
+| `FRONTEND_SERVICE_API_KEY` | Service key for that backend (secret; the same value as the backend's `FRONTEND_SERVICE_API_KEY`) |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | Address behind the footer's Contact link (optional; without it the link is hidden) |
 | `NEXT_PUBLIC_PRIVACY_OFFICER_NAME`, `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` | Person in charge of personal information, shown in the privacy policy. Required: `next build` fails without them |
 
@@ -49,8 +52,12 @@ least one of `LOOPS_API_KEY` and `SLACK_WEBHOOK_URL`.
 - Set `NEXT_PUBLIC_PRIVACY_OFFICER_NAME` and `NEXT_PUBLIC_PRIVACY_OFFICER_EMAIL` (the person in
   charge of personal information; the policy shows both). The build fails if either is missing.
 - Read the policy's retention periods (`privacy.en.ts`, section "How long we keep it") and
-  make them true: waitlist data deleted within 24 months; Google Analytics data retention set to
+  make them true: signup contacts (Loops) and Slack notifications deleted within 24 months; Google Analytics data retention set to
   14 months (GA4 > Admin > Data collection and modification > Data retention).
+- In Loops, check that no automation sends a "you're on the list" or welcome email to every new contact: the
+  form now creates a contact for each visitor who starts a signup, finished or not. Contacts are
+  subscribed by default, so also make sure no Loops campaign or audience targets "all subscribed"
+  contacts: the policy promises no marketing email unless people ask for it.
 - In Loops, create these contact properties (type: string) before the first signup:
   `language`, `doors`, `utmSource`, `utmMedium`, `utmCampaign`, `utmContent`, `utmTerm`. If one is
   missing, Loops rejects the full contact and the route saves just email, source and language
@@ -77,7 +84,7 @@ Consent is opt-in, with separate Analytics and Advertising choices, saved in the
 | Event | Fired when | Meta Pixel (browser) | Meta CAPI (server) | Google (gtag) |
 |---|---|---|---|---|
 | Page view | each page load | `PageView` | | GA4 automatic `page_view` |
-| Waitlist signup succeeds | `/api/waitlist` returns OK | `Lead` + `eventID` | `Lead`, same `event_id` | `generate_lead` (`lead_source`, `language`) |
+| Email form submitted (the lead) | `/api/waitlist` returns OK | `Lead` + `eventID` | `Lead`, same `event_id` | `generate_lead` (`lead_source`, `language`) |
 
 Meta deduplicates the Pixel and server `Lead` on `event_id` + event name. The server event carries
 a SHA-256 hash of the lowercased email, `fbp`/`fbc` (cookies, or built from `fbclid`), the client
@@ -98,13 +105,31 @@ with the signup, so no attribution cookie is used. The language switcher keeps t
 For Google Ads, turn on auto-tagging (adds `gclid`); UTMs are optional, for example
 `utm_source=google&utm_medium=cpc&utm_campaign={campaignid}`.
 
+## Signup link
+
+`POST /api/waitlist` also asks the Doorsly backend (`POST {BACKEND_API_URL}/auth/signups`, service key,
+[lib/server/app-signup.ts](lib/server/app-signup.ts)) to record the signup and email the visitor a link to
+create their account. The page stays put and shows "Check your email". The backend owns accounts, expiry
+(48 hours), the per-address limits and the reset email for people who already have an account; this site
+only forwards the email, language and campaign tags. With Advertising accepted it also forwards `fbclid`,
+`fbp`, `fbc`, the Lead's event id, the IP and the user agent, which the backend uses for its
+`CompleteRegistration` event. The request decides the response: if it fails the form shows an error and
+no `Lead` is sent. Slack and Loops are best-effort records of the lead. The Lead stays the campaign's
+optimisation event. It still counts every submit with Advertising accepted, including people who already
+have an account and repeat submits the backend drops, as the old waitlist did; telling the browser
+otherwise would reveal which addresses have accounts.
+
 ## Waitlist route
+
+The route and its `source: "waitlist"` and `content_name: "waitlist"` values keep their old names on purpose, so
+Loops contacts and Meta reporting stay continuous. They now record the start of a signup.
 
 `POST /api/waitlist` takes `email`, `language`, optional `doors` (`1-4`, `5-20`, `21-50`, `50+`),
 the ad parameters, `eventId`, `pageUrl` and the hidden `website` honeypot.
 
-- Posts to Slack and upserts the Loops contact (`PUT https://app.loops.so/api/v1/contacts/update`,
-  `source: "waitlist"`). The signup counts as saved if either succeeds; only both failing returns 502.
+- Asks the backend to email the signup link (see above); only that failing returns 502. In parallel it posts
+  to Slack and upserts the Loops contact (`PUT https://app.loops.so/api/v1/contacts/update`,
+  `source: "waitlist"`), both optional and best effort.
 - Limit: 8 requests per IP per 10 minutes (`429`), counted in memory per server instance. On
   serverless hosting each warm instance counts separately; add a firewall rule if you need a
   hard cap.
@@ -117,7 +142,8 @@ the ad parameters, `eventId`, `pageUrl` and the hidden `website` honeypot.
    `googletagmanager.com`, `google-analytics.com` or `doubleclick.net`, and only `dl_consent` may be
    set after you answer. "Reject all" must keep it that way.
 2. **Meta Test events.** Set `META_CAPI_TEST_EVENT_CODE`, redeploy, open Events Manager > Test events,
-   enter the site URL, accept Advertising, then join the waitlist. Expect
+   enter the site URL, accept Advertising, then submit the email form (the page shows "Check your email"
+   and the link arrives in your inbox). Expect
    `PageView` and `Lead` from Browser, and `Lead` from Server, marked as deduplicated
    (one `Lead`, "Browser and Server"). Check the match-quality fields (email, IP, user agent,
    `fbp`/`fbc`). Then remove `META_CAPI_TEST_EVENT_CODE` and redeploy.

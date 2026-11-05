@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { requestAppSignup } from "@/lib/server/app-signup";
 import { clientIpFromHeaders } from "@/lib/server/client-ip";
 import { upsertLoopsContact } from "@/lib/server/loops";
 import { hasAdvertisingConsent, sendLead } from "@/lib/server/meta-capi";
@@ -11,16 +12,14 @@ const MAX_BODY_BYTES = 10_000;
 const allowRequest = createRateLimiter();
 
 /**
- * Waitlist signup. The signup is kept if either Slack or Loops accepts it; the Meta Lead is sent
- * only after that, and only with Advertising consent (see lib/server/meta-capi.ts).
+ * The email form. The Doorsly backend emails the visitor a link to create their account; that is
+ * what decides the response. Slack and Loops are best-effort records of the lead. The Meta Lead
+ * is sent after the link request succeeds, and only with Advertising consent (see
+ * lib/server/meta-capi.ts).
  */
 export async function POST(request: NextRequest) {
   const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
   const loopsApiKey = process.env.LOOPS_API_KEY;
-  if (!slackWebhookUrl && !loopsApiKey) {
-    console.error("[waitlist] Neither SLACK_WEBHOOK_URL nor LOOPS_API_KEY is set");
-    return NextResponse.json({ error: "Waitlist is not configured." }, { status: 500 });
-  }
 
   // No IP header (not behind a proxy) means no limit rather than one bucket shared by everyone.
   const ip = clientIpFromHeaders(request.headers);
@@ -52,13 +51,15 @@ export async function POST(request: NextRequest) {
   // Bots fill the hidden field. Answer like a success so they learn nothing, and store nothing.
   if (signup.honeypot) return NextResponse.json({ ok: true }, { status: 200 });
 
-  // Independent destinations: one failing must not lose the signup if the other succeeded.
-  const [slack, loops] = await Promise.all([
+  // Independent: a failing Slack or Loops doesn't fail the signup, but they are awaited because
+  // serverless hosts can stop work that outlives the response (a slow one delays the answer).
+  const [linkSent] = await Promise.all([
+    requestAppSignup(signup, request, ip),
     slackWebhookUrl ? notifySlack(slackWebhookUrl, signup) : Promise.resolve(false),
     loopsApiKey ? upsertLoopsContact(loopsApiKey, signup) : Promise.resolve(false),
   ]);
-  if (!slack && !loops) {
-    return NextResponse.json({ error: "Failed to save the signup." }, { status: 502 });
+  if (!linkSent) {
+    return NextResponse.json({ error: "Failed to send the sign-up link." }, { status: 502 });
   }
 
   // Server-side Lead, same event_id as the browser Pixel's. Awaited (4 s cap) because serverless
